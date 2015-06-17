@@ -1,3 +1,4 @@
+require 'csv'
 require 'nokogiri'
 require './config.rb'
 require './mappings.rb'
@@ -34,29 +35,23 @@ def parse_mapping(map, xml_obj, concatenator='')
 	end
 end
 
-source_xml = File.open(XML_SOURCE)
-doc = Nokogiri::XML(source_xml)
+CSV.open("output.csv", "wb") do |csv|
+	csv << @mappings.keys
 
-File.open('output.csv', 'w') do |out|
+	File.open(XML_SOURCE) do |f|
+		doc = Nokogiri::XML(f)
 
-	headings = ''
-	@mappings.each do |key, mapping|
-		headings.concat_with(key.to_s, ',')
-	end
-	out.puts headings
+		records = doc.xpath(ROOT_XPATH)
 
-	records = doc.xpath(ROOT_XPATH)
-
-	records.each do |record|
-		row = ''
-		@mappings.each do |key, mapping|
-			concatenator = mapping[:concatenator] || '\n'
-			row.concat_with('"'+ parse_mapping(mapping[:map], record, concatenator) +'"', ',')
+		records.each do |record|
+			row = []
+			@mappings.each do |key, mapping|
+				concatenator = mapping[:concatenator] || '\n'
+				row.push('"' + parse_mapping(mapping[:map], record, concatenator) + '"')
+			end
+			csv << row
 		end
-		out.puts row
 
 	end
 
 end
-
-source_xml.close
