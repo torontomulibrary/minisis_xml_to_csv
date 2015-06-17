@@ -3,35 +3,24 @@ require 'nokogiri'
 require './config.rb'
 require PATH_TO_MAPPINGS
 
-# this is hacky! don't do this!
-class String
-	def concat_with(str, concatenator='')
-		if self.length != 0
-			replace self + concatenator + str
-		else
-			replace self + str
-		end
-	end
-end
-
 def parse_mapping(map, xml_obj, concatenator='')
+	col = []
+	
 	if map.kind_of? Array
-		col = ''
 		map.each do |xpath|
 			elements = xml_obj.xpath(xpath)
 			elements.each do |element|
-				col.concat_with(element.text.gsub('"', '""'), concatenator)
+				col.push(element.text.gsub('"', '""'))
 			end
 		end
-		return col
+		return col.join(concatenator)
 	elsif map.kind_of? Hash
 		elements = xml_obj.xpath(map[:element])
 		splitter = map[:concatenator] || '\n'
-		col = ''
 		elements.each do |element|
-			col.concat_with(parse_mapping(map[:map], element, splitter), concatenator)
+			col.push(parse_mapping(map[:map], element, splitter))
 		end
-		return col
+		return col.join(concatenator)
 	end
 end
 
