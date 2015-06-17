@@ -1,7 +1,7 @@
 require 'csv'
 require 'nokogiri'
 require './config.rb'
-require './mappings.rb'
+require PATH_TO_MAPPINGS
 
 # this is hacky! don't do this!
 class String
@@ -25,11 +25,11 @@ def parse_mapping(map, xml_obj, concatenator='')
 		end
 		return col
 	elsif map.kind_of? Hash
-		x = xml_obj.xpath(map[:element])
+		elements = xml_obj.xpath(map[:element])
+		splitter = map[:concatenator] || '\n'
 		col = ''
-		x.each do |xx|
-			splitter = map[:concatenator] || '\n'
-			col.concat_with(parse_mapping(map[:map], xx, splitter), concatenator)
+		elements.each do |element|
+			col.concat_with(parse_mapping(map[:map], element, splitter), concatenator)
 		end
 		return col
 	end
@@ -38,16 +38,16 @@ end
 CSV.open("output.csv", "wb") do |csv|
 	csv << @mappings.keys
 
-	File.open(XML_SOURCE) do |f|
+	File.open(PATH_TO_XML) do |f|
 		doc = Nokogiri::XML(f)
 
-		records = doc.xpath(ROOT_XPATH)
+		records = doc.xpath(ROOT_ELEMENT_XPATH)
 
 		records.each do |record|
 			row = []
 			@mappings.each do |key, mapping|
 				concatenator = mapping[:concatenator] || '\n'
-				row.push('"' + parse_mapping(mapping[:map], record, concatenator) + '"')
+				row.push(parse_mapping(mapping[:map], record, concatenator))
 			end
 			csv << row
 		end

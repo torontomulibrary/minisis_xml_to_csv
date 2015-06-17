@@ -1,15 +1,20 @@
 <record_set>
 	<XML_RECORD>
 		<NAME>
-			<FIRST_NAME>Patrick</FIRST_NAME>
+			<FIRST_NAME>Patr,ick</FIRST_NAME>
 			<LAST_NAME>Fung</LAST_NAME>
 		</NAME>
 		<NAME>
-			<FIRST_NAME>Some</FIRST_NAME>
 			<LAST_NAME>Alias</LAST_NAME>
 		</NAME>
 		<EMAIL>patrick.fung@ryerson.ca</EMAIL>
 		<EMAIL>patrick@makestuffdostuff.ca</EMAIL>
+		<NESTED>
+			<NESTEDDATA>
+				<MORENESTING>it works!</MORENESTING>
+				<MORENESTING>as,df</MORENESTING>
+			</NESTEDDATA>
+		</NESTED>
 	</XML_RECORD>
 	<XML_RECORD>
 		<NAME>

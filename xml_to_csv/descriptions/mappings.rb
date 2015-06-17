@@ -1,17 +1,4 @@
-# @mappings = {
-# 	:name => {
-# 		:map => {
-# 			:element => 'NAME',
-# 			:map => ['FIRST_NAME', 'LAST_NAME'],
-# 			:concatenator => ' '
-# 		},
-# 		:concatenator => '!'
-# 	},
-# 	:contact => {
-# 		:map => ['EMAIL', 'PHONE'],
-# 		:concatenator => '|',
-# 	}
-# }
+
 @mappings = {
 	:legacyId => {
 		:map => ['REFD']
