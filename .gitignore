@@ -1,2 +1,3 @@
 .vagrant/
 *.csv
+*/private_data/*
