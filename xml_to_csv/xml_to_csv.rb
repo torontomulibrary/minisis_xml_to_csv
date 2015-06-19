@@ -11,7 +11,7 @@ def parse_mapping(map, xml_obj, concatenator='')
 		map.each do |xpath|
 			elements = xml_obj.xpath(xpath)
 			elements.each do |element|
-				col << element.text.gsub('"', '""')
+				col << element.text.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').gsub('"', '""')
 			end
 		end
   when Hash
