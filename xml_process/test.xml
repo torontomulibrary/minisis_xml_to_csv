@@ -1,0 +1,19 @@
+<record_set>
+	<XML_RECORD>
+		<FIRST_NAME>Patrick</FIRST_NAME>
+		<LAST_NAME>Fung</LAST_NAME>
+		<EMAIL>patrick.fung@ryerson.ca</EMAIL>
+		<EMAIL>patrick@makestuffdostuff.ca</EMAIL>
+	</XML_RECORD>
+	<XML_RECORD>
+		<FIRST_NAME>John</FIRST_NAME>
+		<LAST_NAME>Doe</LAST_NAME>
+		<EMAIL>john@example.com</EMAIL>
+		<PHONE>905-888-8888</PHONE>
+	</XML_RECORD>
+	<XML_RECORD>
+		<FIRST_NAME>Jane</FIRST_NAME>
+		<LAST_NAME>Doe</LAST_NAME>
+		<EMAIL>jane@example.com</EMAIL>
+	</XML_RECORD>
+</record_set>
