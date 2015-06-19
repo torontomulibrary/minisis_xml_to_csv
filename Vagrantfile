@@ -41,15 +41,14 @@ Vagrant.configure(2) do |config|
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
-  # Example for VirtualBox:
-  #
-  # config.vm.provider "virtualbox" do |vb|
-  #   # Display the VirtualBox GUI when booting the machine
-  #   vb.gui = true
-  #
-  #   # Customize the amount of memory on the VM:
-  #   vb.memory = "1024"
-  # end
+  config.vm.provider "virtualbox" do |vb|
+    vb.customize ["modifyvm", :id, "--memory", '2048']
+
+    # comment these two lines out if CPU only has one core
+    vb.customize ["modifyvm", :id, "--cpus", '2']
+    vb.customize ["modifyvm", :id, "--ioapic", "on"]
+  end
+
   #
   # View the documentation for the provider you are using for more
   # information on available options.
