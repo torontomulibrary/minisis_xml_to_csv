@@ -1,8 +1,9 @@
 ROOT_ELEMENT_XPATH = "//XML_RECORD"
+# ROOT_ELEMENT_XPATH = "//XML_RECORD[not(REFD_HIGHER)]"
 
 # # Descriptions
-# PATH_TO_XML = "./private_data/MIN_DESCRIPTION.xml"
-# PATH_TO_MAPPINGS = "./mappings/descriptions.rb"
+# PATH_TO_XML = "./private_data/descriptions.xml"
+PATH_TO_MAPPINGS = "./mappings/descriptions.rb"
 
 # # Authorities
 # PATH_TO_XML = "./private_data/auth-utf8.xml"
@@ -14,4 +15,4 @@ ROOT_ELEMENT_XPATH = "//XML_RECORD"
 
 # Test
 PATH_TO_XML = "./test/test_data.xml"
-PATH_TO_MAPPINGS = "./mappings/test.rb"
+# PATH_TO_MAPPINGS = "./mappings/test.rb"
