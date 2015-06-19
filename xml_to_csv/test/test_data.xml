@@ -1,34 +1,20 @@
 <record_set>
 	<XML_RECORD>
-		<NAME>
-			<FIRST_NAME>Patr,ick</FIRST_NAME>
-			<LAST_NAME>Fung</LAST_NAME>
-		</NAME>
-		<NAME>
-			<LAST_NAME>Alias</LAST_NAME>
-		</NAME>
-		<EMAIL>patrick.fung@ryerson.ca</EMAIL>
-		<EMAIL>patrick@makestuffdostuff.ca</EMAIL>
-		<NESTED>
-			<NESTEDDATA>
-				<MORENESTING>it works!</MORENESTING>
-				<MORENESTING>as,df</MORENESTING>
-			</NESTEDDATA>
-		</NESTED>
+		<REFD>1</REFD>
 	</XML_RECORD>
 	<XML_RECORD>
-		<NAME>
-			<FIRST_NAME>John</FIRST_NAME>
-			<LAST_NAME>Doe</LAST_NAME>
-		</NAME>
-		<EMAIL>john@example.com</EMAIL>
-		<PHONE>905-888-8888</PHONE>
+		<REFD>2</REFD>
+		<REFD_HIGHER>1</REFD_HIGHER>
 	</XML_RECORD>
 	<XML_RECORD>
-		<NAME>
-			<FIRST_NAME>Jane</FIRST_NAME>
-			<LAST_NAME>Doe</LAST_NAME>
-		</NAME>
-		<EMAIL>jane@example.com</EMAIL>
+		<REFD>3</REFD>
+	</XML_RECORD>
+	<XML_RECORD>
+		<REFD>4</REFD>
+		<REFD_HIGHER>1</REFD_HIGHER>
+	</XML_RECORD>
+	<XML_RECORD>
+		<REFD>5</REFD>
+		<REFD_HIGHER>2</REFD_HIGHER>
 	</XML_RECORD>
 </record_set>
