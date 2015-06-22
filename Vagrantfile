@@ -67,7 +67,7 @@ Vagrant.configure(2) do |config|
   # install nokogiri 
   config.vm.provision "shell", inline: <<-SHELL
     sudo apt-get update
-    sudo apt-get install -y zlib1g-dev ruby-dev
-    sudo gem install nokogiri parallel ox
+    sudo apt-get install -y zlib1g-dev ruby-dev libicu-dev g++
+    sudo gem install nokogiri parallel ox charlock_holmes
   SHELL
 end
