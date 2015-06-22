@@ -15,7 +15,9 @@ def parse_mapping(map, ox_element, concatenator='')
 			#	elements = xml_obj.xpath(xpath) # Using Nokogiri
 			elements = ox_element.locate(xpath)
 			elements.each do |element|
-				col << element.text.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').gsub('"', '""')
+				# col << element.text.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').gsub('"', '""')
+				# We shouldnt need the .encode line anymore, because we already did it in the pre-processing
+				col << element.text
 			end
 		end
   when Hash
@@ -80,6 +82,7 @@ def amazing_method(records, parents)
 		write_records_to_csv(children)
 
 		# See if there are child records belonging to this set of records
+		records = records - children
 		amazing_method(records, children)
 	end
 
@@ -112,6 +115,7 @@ total_elapsed = Benchmark.realtime do
 		parent.locate("REFD")[0].text
 	end
 
+	records = records - roots
 	amazing_method(records, roots)
 end
 puts "Completed in #{total_elapsed}s\n\n"
