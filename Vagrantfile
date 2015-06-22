@@ -42,7 +42,7 @@ Vagrant.configure(2) do |config|
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   config.vm.provider "virtualbox" do |vb|
-    vb.customize ["modifyvm", :id, "--memory", '2048']
+    vb.customize ["modifyvm", :id, "--memory", '4096']
 
     # comment these two lines out if CPU only has one core
     vb.customize ["modifyvm", :id, "--cpus", '2']
@@ -68,6 +68,6 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", inline: <<-SHELL
     sudo apt-get update
     sudo apt-get install -y zlib1g-dev ruby-dev
-    sudo gem install nokogiri
+    sudo gem install nokogiri parallel ox
   SHELL
 end
