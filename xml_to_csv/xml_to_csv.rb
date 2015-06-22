@@ -1,5 +1,6 @@
 require 'csv'
 require 'nokogiri'
+require 'benchmark'
 require './config.rb'
 require PATH_TO_MAPPINGS
 
@@ -38,17 +39,52 @@ def write_records_to_csv(records)
 	end
 end
 
+def amazing_method(doc, record_ids)
+	record_ids.each do |record_id|
+		puts "Finding records with parent id: #{record_id}"
+		records = nil
+		elapsed = Benchmark.realtime do 
+			records = doc.xpath("//XML_RECORD[REFD_HIGHER[text() = '#{record_id}']]") # takes ~1.2 seconds
+		end
+		puts "Found #{records.count} records in #{elapsed}s"
+		write_records_to_csv(records)
+
+		# See if there are child records belonging to this set of records
+		ids = records.xpath("REFD").map(&:text)
+		amazing_method(doc, ids)
+	end
+end
+
 # write CSV header to output file
 CSV.open("output.csv","wb") do |csv|
 	csv << @mappings.keys
 end
 
 # Open XML file and begin to parse & organize it
-File.open(PATH_TO_XML) do |f|
-	doc = Nokogiri::XML(f)
+total_elapsed = Benchmark.realtime do 
+	File.open(PATH_TO_XML) do |f|
 
-	puts "Finding root records ...."
-	root_records = doc.xpath(ROOT_ELEMENT_XPATH)
-	puts "Found #{root_records.count} root records"
-	write_records_to_csv(root_records)
+		doc = Nokogiri::XML(f)
+
+		total_records = doc.xpath("//XML_RECORD").count
+		puts "Total number of records: #{total_records}"
+
+		puts "Finding root records ...."
+		records = nil
+		elapsed = Benchmark.realtime do 
+			records = doc.xpath("//XML_RECORD[not(REFD_HIGHER)]") # takes ~1.2 seconds
+			# records = doc.xpath("//XML_RECORD") # takes ~0.23 seconds
+		end
+		# puts "Found #{records.count} records in #{elapsed}s"
+		# write_records_to_csv(records)
+
+		# Find child records belonging to root records
+
+		# This collects all the REFDs into a single array using 
+		# the Nokogiri::XML::NodeSet#text method
+		# See: http://stackoverflow.com/questions/13200256/nokogiri-returning-values-as-a-string-not-an-array
+		# record_ids = records.xpath("REFD").map(&:text)
+		# amazing_method(doc, record_ids)
+	end
 end
+puts "Completed in #{total_elapsed}s"
