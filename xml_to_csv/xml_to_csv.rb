@@ -2,6 +2,7 @@ require 'csv'
 require 'nokogiri'
 require 'benchmark'
 require './config.rb'
+require './preprocess_xml.rb'
 require PATH_TO_MAPPINGS
 
 def parse_mapping(map, xml_obj, concatenator='')
@@ -61,9 +62,10 @@ CSV.open("output.csv","wb") do |csv|
 	csv << @mappings.keys
 end
 
+puts "Begin XML to CSV conversion"
 # Open XML file and begin to parse & organize it
 total_elapsed = Benchmark.realtime do 
-	File.open(PATH_TO_XML) do |f|
+	File.open("preprocessed.xml") do |f|
 
 		doc = Nokogiri::XML(f)
 
@@ -88,4 +90,7 @@ total_elapsed = Benchmark.realtime do
 		amazing_method(doc, record_ids)
 	end
 end
-puts "Completed in #{total_elapsed}s"
+puts "Completed in #{total_elapsed}s\n\n"
+
+# Remove generated files
+File.delete("preprocessed.xml") if File.exist?("preprocessed.xml")
