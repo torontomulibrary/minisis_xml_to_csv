@@ -39,6 +39,7 @@ def write_records_to_csv(records)
 	end
 end
 
+# TODO: Rename this method to something more useful.
 def amazing_method(doc, record_ids)
 	record_ids.each do |record_id|
 		puts "Finding records with parent id: #{record_id}"
@@ -75,16 +76,16 @@ total_elapsed = Benchmark.realtime do
 			records = doc.xpath("//XML_RECORD[not(REFD_HIGHER)]") # takes ~1.2 seconds
 			# records = doc.xpath("//XML_RECORD") # takes ~0.23 seconds
 		end
-		# puts "Found #{records.count} records in #{elapsed}s"
-		# write_records_to_csv(records)
+		puts "Found #{records.count} records in #{elapsed}s"
+		write_records_to_csv(records)
 
 		# Find child records belonging to root records
 
 		# This collects all the REFDs into a single array using 
 		# the Nokogiri::XML::NodeSet#text method
 		# See: http://stackoverflow.com/questions/13200256/nokogiri-returning-values-as-a-string-not-an-array
-		# record_ids = records.xpath("REFD").map(&:text)
-		# amazing_method(doc, record_ids)
+		record_ids = records.xpath("REFD").map(&:text)
+		amazing_method(doc, record_ids)
 	end
 end
 puts "Completed in #{total_elapsed}s"
