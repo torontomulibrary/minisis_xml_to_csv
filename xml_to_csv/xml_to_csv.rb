@@ -100,7 +100,7 @@ end
 # Using ox
 puts "--- Begin XML to CSV conversion ---"
 total_elapsed = Benchmark.realtime do 
-	doc = Ox.load_file("preprocessed.xml")
+	doc = Ox.load_file("./tmp/preprocessed.xml")
 
 	records = doc.locate("XML_RECORD")
 	puts "Total number of records #{records.count}\n\n"
@@ -160,4 +160,4 @@ puts "Completed in #{total_elapsed}s\n\n"
 # puts "Completed in #{total_elapsed}s\n\n"
 
 # Remove generated files
-File.delete("preprocessed.xml") if File.exist?("preprocessed.xml")
+File.delete("./tmp/preprocessed.xml") if File.exist?("./tmp/preprocessed.xml")

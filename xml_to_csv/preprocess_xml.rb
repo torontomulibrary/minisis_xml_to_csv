@@ -1,6 +1,7 @@
 require 'benchmark'
 require 'nokogiri'
 require 'charlock_holmes'
+require 'fileutils'
 require './config.rb'
 
 puts "Begin preprocessing input XML ..."
@@ -23,8 +24,9 @@ total_elapsed = Benchmark.realtime do
   	record.xpath("LOG_RECORD | AUTH_MOD_HIST | MODIFIED_HIST").remove
   end
 
+  FileUtils::mkdir_p 'tmp'
 	# ox doesnt seem to like the <?xml version="1.0" encoding="UTF-8"?> line before the data
-	File.open('preprocessed.xml', 'wb') { |f| f.print(doc.to_xml(:encoding => 'UTF-8', :save_with => Nokogiri::XML::Node::SaveOptions::NO_DECLARATION)) }
+	File.open('./tmp/preprocessed.xml', 'wb') { |f| f.print(doc.to_xml(:encoding => 'UTF-8', :save_with => Nokogiri::XML::Node::SaveOptions::NO_DECLARATION)) }
 end
 
 # try to free up memory
