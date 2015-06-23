@@ -66,8 +66,9 @@ Vagrant.configure(2) do |config|
 
   # install nokogiri 
   config.vm.provision "shell", inline: <<-SHELL
+    apt-add-repository ppa:brightbox/ruby-ng
     sudo apt-get update
-    sudo apt-get install -y zlib1g-dev ruby-dev libicu-dev g++
+    sudo apt-get install -y zlib1g-dev ruby-dev libicu-dev g++ ruby2.2
     sudo gem install nokogiri parallel ox charlock_holmes
   SHELL
 end
