@@ -45,7 +45,7 @@ Vagrant.configure(2) do |config|
     vb.customize ["modifyvm", :id, "--memory", '4096']
 
     # comment these two lines out if CPU only has one core
-    vb.customize ["modifyvm", :id, "--cpus", '2']
+    vb.customize ["modifyvm", :id, "--cpus", '4']
     vb.customize ["modifyvm", :id, "--ioapic", "on"]
   end
 
