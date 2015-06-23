@@ -1,7 +1,11 @@
 require 'benchmark'
+#require 'ruby-prof'
+
 require 'csv'
-require 'nokogiri'
+#require 'nokogiri'
+require 'parallel'
 require 'ox'
+
 require './config.rb'
 require './preprocess_xml.rb'
 require PATH_TO_MAPPINGS
@@ -72,8 +76,8 @@ def amazing_method(records, parents)
 	parent_ids.each do |parent_id|
 		puts "Finding records with parent id: #{parent_id}"
 		children = []
-		time = Benchmark.realtime do 
-			records.each do |record|
+		time = Benchmark.realtime do
+      records.each do |record|
 				el = record.locate("REFD_HIGHER")[0]
 				children << record if !el.nil? && el.text == parent_id
 			end
@@ -100,6 +104,10 @@ total_elapsed = Benchmark.realtime do
 
 	records = doc.locate("XML_RECORD")
 	puts "Total number of records #{records.count}\n\n"
+  
+  # try to free up memory
+  doc = nil
+  GC.start
 
 	puts "Finding root records"
 	roots = []

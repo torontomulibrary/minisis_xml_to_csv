@@ -26,4 +26,11 @@ total_elapsed = Benchmark.realtime do
 	# ox doesnt seem to like the <?xml version="1.0" encoding="UTF-8"?> line before the data
 	File.open('preprocessed.xml', 'wb') { |f| f.print(doc.to_xml(:encoding => 'UTF-8', :save_with => Nokogiri::XML::Node::SaveOptions::NO_DECLARATION)) }
 end
+
+# try to free up memory
+detection = nil
+records = nil
+doc = nil
+GC.start
+
 puts "Preprocessing complete in #{total_elapsed}s\n\n"
