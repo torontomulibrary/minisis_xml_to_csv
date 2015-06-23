@@ -45,7 +45,7 @@ Vagrant.configure(2) do |config|
     vb.customize ["modifyvm", :id, "--memory", '4096']
 
     # comment these two lines out if CPU only has one core
-    vb.customize ["modifyvm", :id, "--cpus", '2']
+    vb.customize ["modifyvm", :id, "--cpus", '4']
     vb.customize ["modifyvm", :id, "--ioapic", "on"]
   end
 
@@ -66,8 +66,10 @@ Vagrant.configure(2) do |config|
 
   # install nokogiri 
   config.vm.provision "shell", inline: <<-SHELL
+    apt-add-repository ppa:brightbox/ruby-ng
     sudo apt-get update
-    sudo apt-get install -y zlib1g-dev ruby-dev libicu-dev g++
+    sudo apt-get install -y zlib1g-dev libicu-dev g++ ruby2.2 ruby2.2-dev ruby-switch
+    sudo ruby-switch --set ruby2.2
     sudo gem install nokogiri parallel ox charlock_holmes
   SHELL
 end

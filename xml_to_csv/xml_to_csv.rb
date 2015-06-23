@@ -1,7 +1,11 @@
 require 'benchmark'
+#require 'ruby-prof'
+
 require 'csv'
-require 'nokogiri'
+#require 'nokogiri'
+require 'parallel'
 require 'ox'
+
 require './config.rb'
 require './preprocess_xml.rb'
 require PATH_TO_MAPPINGS
@@ -72,8 +76,8 @@ def amazing_method(records, parents)
 	parent_ids.each do |parent_id|
 		puts "Finding records with parent id: #{parent_id}"
 		children = []
-		time = Benchmark.realtime do 
-			records.each do |record|
+		time = Benchmark.realtime do
+      records.each do |record|
 				el = record.locate("REFD_HIGHER")[0]
 				children << record if !el.nil? && el.text == parent_id
 			end
@@ -96,10 +100,14 @@ end
 # Using ox
 puts "--- Begin XML to CSV conversion ---"
 total_elapsed = Benchmark.realtime do 
-	doc = Ox.load_file("preprocessed.xml")
+	doc = Ox.load_file("./tmp/preprocessed.xml")
 
 	records = doc.locate("XML_RECORD")
 	puts "Total number of records #{records.count}\n\n"
+  
+  # try to free up memory
+  doc = nil
+  GC.start
 
 	puts "Finding root records"
 	roots = []
@@ -152,4 +160,4 @@ puts "Completed in #{total_elapsed}s\n\n"
 # puts "Completed in #{total_elapsed}s\n\n"
 
 # Remove generated files
-File.delete("preprocessed.xml") if File.exist?("preprocessed.xml")
+File.delete("./tmp/preprocessed.xml") if File.exist?("./tmp/preprocessed.xml")

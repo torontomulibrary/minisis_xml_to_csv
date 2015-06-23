@@ -1,3 +1,4 @@
 .vagrant/
 *.csv
 */private_data/*
+*/tmp/*
