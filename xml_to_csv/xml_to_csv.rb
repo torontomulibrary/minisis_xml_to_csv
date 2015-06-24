@@ -31,26 +31,7 @@ config.each do |klass, path|
     rows = process_xml(klass, tempfile)
   end
 
-  # Loop over each row and process individual values in place
-  rows.map! do |row|
-    row.map! do |value|
-      if value.is_a? String
-        # Replace extra whitespaces
-        value.strip!
-        value.squeeze!
-
-        # Replace incorrect newlines
-        value = value.gsub '<br>', "\n"
-        value = value.gsub '\\n', "\n"
-        value = value.squeeze("\n")
-      else
-        value
-      end
-    end
-  end
-
-  # Remove duplicate rows
-  rows.uniq!
+  process_rows!(rows)
   
   puts "Processing complete in #{total_elapsed}s\n\n"
 
