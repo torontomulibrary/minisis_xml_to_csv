@@ -6,16 +6,44 @@ require 'csv'
 require 'sax-machine'
 
 # NB: Only one of the following are required
-#require 'nokogiri'
+require 'nokogiri'
 #require 'ox'
-require 'oga'
+#require 'oga'
 
-require './config.rb'
-require './preprocess_xml.rb'
-require PATH_TO_MAPPINGS
 Dir[File.dirname(__FILE__) + '/lib/*.rb'].each {|file| require file }
 
-binding.pry
+# Set class-pathname pairs
+config = { 
+#           Accession => "./private_data/accessions.xml",
+#           Authority => "./private_data/authorities.xml",
+           Description => "./private_data/descriptions.xml"
+         }
+
+# Pre-process each type of input file
+config.each do |klass, path|
+  puts "\n\nBegin preprocessing #{path} ..."
+  total_elapsed = Benchmark.realtime { preprocess_xml(path) }
+  puts "Preprocessing complete in #{total_elapsed}s\n\n"
+end
+
+exit
+
+# Define the incoming XML structure
+class RecordSet
+  include SAXMachine
+  elements :XML_RECORD, as: :records, class: Accession # FIXME
+end
+
+xml = File.read("./tmp/preprocessed.xml")
+record_set = RecordSet.parse(xml)
+
+total_elapsed = Benchmark.realtime do
+  # Parallel.each(record_set.records) do |record|
+  record_set.records.each do |record|
+    vals = record.class.column_names.map { |col| record.send(col) }
+#puts vals.join(' ').encode('UTF-8')
+  end
+end
 
 =begin
 
@@ -116,9 +144,9 @@ total_elapsed = Benchmark.realtime do
 	records = records - roots
 	amazing_method(records, roots)
 end
-puts "Completed in #{total_elapsed}s\n\n"
-
 =end
+
+puts "Completed in #{total_elapsed}s\n\n"
 
 # Forcibly remove temporary files
 FileUtils.rm_rf('./tmp')
