@@ -9,7 +9,7 @@ Dir[File.dirname(__FILE__) + '/lib/**/*.rb'].each {|file| require file }
 config = {
            Accession => "./private_data/accessions.xml",
            Authority => "./private_data/authorities.xml",
-#           Description => "./private_data/descriptions.xml"
+           Description => "./private_data/descriptions.xml"
          }
 
 config.each do |klass, path|
@@ -31,12 +31,31 @@ config.each do |klass, path|
     rows = process_xml(klass, tempfile)
   end
 
-  # TODO: loop over each row and process individual values
+  # Loop over each row and process individual values in place
+  rows.map! do |row|
+    row.map! do |value|
+      if value.is_a? String
+        # Replace extra whitespaces
+        value.strip!
+        value.squeeze!
 
+        # Replace incorrect newlines
+        value = value.gsub '<br>', "\n"
+        value = value.gsub '\\n', "\n"
+        value = value.squeeze("\n")
+      else
+        value
+      end
+    end
+  end
+
+  # Remove duplicate rows
+  rows.uniq!
+  
   puts "Processing complete in #{total_elapsed}s\n\n"
 
   outfile = path + '.csv'
-  puts "Writing #{outfile} ..."
+  puts "Writing #{rows.count} rows to #{outfile} ..."
 
   CSV.open(outfile, 'w') do |csv|
   	csv << klass.column_names.map(&:to_s)
