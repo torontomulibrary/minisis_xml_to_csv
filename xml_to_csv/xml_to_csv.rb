@@ -3,83 +3,42 @@ require 'benchmark'
 require 'parallel'
 
 require 'csv'
-require 'nokogiri'
 
-require 'sax-machine'
-require 'ox'
-require 'oga'
-
-# NB: Only one of the following are required: nokogiri, ox, oga
-SAXMachine.handler = :nokogiri
-
-Dir[File.dirname(__FILE__) + '/lib/*.rb'].each {|file| require file }
+Dir[File.dirname(__FILE__) + '/lib/**/*.rb'].each {|file| require file }
 
 # Set class-pathname pairs
 config = {
-           Accession => "./private_data/accessions.xml",
-           Authority => "./private_data/authorities.xml",
-#           Description => "./private_data/descriptions.xml"
+#           Accession => "./private_data/accessions.xml",
+#           Authority => "./private_data/authorities.xml",
+           Description => "./private_data/descriptions.xml"
          }
 
 config.each do |klass, path|
   puts "\n\nBegin preprocessing #{path} ..."
 
-  # Pre-process each type of input file
+  # Pre-process each input XML file
   tempfile = nil
   total_elapsed = Benchmark.realtime do
     tempfile = preprocess_xml(path)
   end 
 
-  puts "Preprocessing complete in #{total_elapsed}s\n\n"
-  
-  
+  puts "Preprocessing complete in #{total_elapsed}s\n\n"  
+  puts "Begin processing #{tempfile.path} ..."
+
+  # Process the XML file to use for CSV creation
+  values = nil
+  total_elapsed = Benchmark.realtime do
+    values = process_xml(klass, tempfile)
+  end 
+
+  puts "Processing complete in #{total_elapsed}s\n\n"  
 end
 
 exit
+# ======== ALL DONE
 
-# Define the incoming XML structure
-class RecordSet
-  include SAXMachine
-  elements :XML_RECORD, as: :records, class: Accession # FIXME
-end
-
-xml = File.read("./tmp/preprocessed.xml")
-record_set = RecordSet.parse(xml)
-
-total_elapsed = Benchmark.realtime do
-  # Parallel.each(record_set.records) do |record|
-  record_set.records.each do |record|
-    vals = record.class.column_names.map { |col| record.send(col) }
-#puts vals.join(' ').encode('UTF-8')
-  end
-end
 
 =begin
-
-def parse_mapping(map, ox_element, concatenator='')
-	col = []
-
-  case map
-  when Array
-		map.each do |xpath|
-			#	elements = xml_obj.xpath(xpath) # Using Nokogiri
-			elements = ox_element.locate(xpath)
-			elements.each do |element|
-				# col << element.text.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').gsub('"', '""')
-				# We shouldnt need the .encode line anymore, because we already did it in the pre-processing
-				col << element.text
-			end
-		end
-  when Hash
-		elements = ox_element.locate(map[:element])
-		splitter = map[:concatenator] || '\n'
-		elements.each do |element|
-			col << parse_mapping(map[:map], element, splitter)
-		end
-  end
-  
-  col.join(concatenator)
-end
 
 def write_records_to_csv(records)
 	CSV.open("output.csv", "ab") do |csv|
