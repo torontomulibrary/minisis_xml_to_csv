@@ -25,7 +25,6 @@ def parse_mapping(map, ox_element, concatenator='')
 			end
 		end
   when Hash
-  	# elements = xml_obj.xpath(map[:element]) # Using Nokogiri
 		elements = ox_element.locate(map[:element])
 		splitter = map[:concatenator] || '\n'
 		elements.each do |element|
@@ -50,24 +49,6 @@ def write_records_to_csv(records)
 end
 
 # TODO: Rename this method to something more useful.
-# Using Nokogiri
-# def amazing_method(doc, record_ids)
-# 	record_ids.each do |record_id|
-# 		puts "Finding records with parent id: #{record_id}"
-# 		records = nil
-# 		elapsed = Benchmark.realtime do 
-# 			records = doc.xpath("//XML_RECORD[REFD_HIGHER[text() = '#{record_id}']]") # takes ~1.2 seconds
-# 		end
-# 		puts "Found #{records.count} records in #{elapsed}s"
-# 		write_records_to_csv(records)
-
-# 		# See if there are child records belonging to this set of records
-# 		ids = records.xpath("REFD").map(&:text)
-# 		amazing_method(doc, ids)
-# 	end
-# end
-
-# Using ox
 def amazing_method(records, parents)
 	parent_ids = parents.map do |parent|
 		parent.locate("REFD")[0].text
@@ -128,36 +109,5 @@ total_elapsed = Benchmark.realtime do
 end
 puts "Completed in #{total_elapsed}s\n\n"
 
-# Using Nokogiri
-# puts "Begin XML to CSV conversion"
-# # Open XML file and begin to parse & organize it
-# total_elapsed = Benchmark.realtime do 
-# 	File.open("preprocessed.xml") do |f|
-
-# 		doc = Nokogiri::XML(f)
-
-# 		total_records = doc.xpath("//XML_RECORD").count
-# 		puts "Total number of records: #{total_records}"
-
-# 		puts "Finding root records ...."
-# 		records = nil
-# 		elapsed = Benchmark.realtime do 
-# 			records = doc.xpath("//XML_RECORD[not(REFD_HIGHER)]") # takes ~1.2 seconds
-# 			# records = doc.xpath("//XML_RECORD") # takes ~0.23 seconds
-# 		end
-# 		puts "Found #{records.count} records in #{elapsed}s"
-# 		write_records_to_csv(records)
-
-# 		# Find child records belonging to root records
-
-# 		# This collects all the REFDs into a single array using 
-# 		# the Nokogiri::XML::NodeSet#text method
-# 		# See: http://stackoverflow.com/questions/13200256/nokogiri-returning-values-as-a-string-not-an-array
-# 		record_ids = records.xpath("REFD").map(&:text)
-# 		amazing_method(doc, record_ids)
-# 	end
-# end
-# puts "Completed in #{total_elapsed}s\n\n"
-
-# Remove generated files
-File.delete("./tmp/preprocessed.xml") if File.exist?("./tmp/preprocessed.xml")
+# Forcibly remove temporary files
+FileUtils.rm_rf('./tmp')
