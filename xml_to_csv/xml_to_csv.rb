@@ -3,27 +3,36 @@ require 'benchmark'
 require 'parallel'
 
 require 'csv'
-require 'sax-machine'
-
-# NB: Only one of the following are required
 require 'nokogiri'
-#require 'ox'
-#require 'oga'
+
+require 'sax-machine'
+require 'ox'
+require 'oga'
+
+# NB: Only one of the following are required: nokogiri, ox, oga
+SAXMachine.handler = :nokogiri
 
 Dir[File.dirname(__FILE__) + '/lib/*.rb'].each {|file| require file }
 
 # Set class-pathname pairs
-config = { 
-#           Accession => "./private_data/accessions.xml",
-#           Authority => "./private_data/authorities.xml",
-           Description => "./private_data/descriptions.xml"
+config = {
+           Accession => "./private_data/accessions.xml",
+           Authority => "./private_data/authorities.xml",
+#           Description => "./private_data/descriptions.xml"
          }
 
-# Pre-process each type of input file
 config.each do |klass, path|
   puts "\n\nBegin preprocessing #{path} ..."
-  total_elapsed = Benchmark.realtime { preprocess_xml(path) }
+
+  # Pre-process each type of input file
+  tempfile = nil
+  total_elapsed = Benchmark.realtime do
+    tempfile = preprocess_xml(path)
+  end 
+
   puts "Preprocessing complete in #{total_elapsed}s\n\n"
+  
+  
 end
 
 exit
