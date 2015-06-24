@@ -1,4 +1,5 @@
 require 'charlock_holmes'
+require 'nokogiri'
 require 'tempfile'
 
 # Set this to automatically try to detect the encoding of the input XML
@@ -39,7 +40,6 @@ def preprocess_xml(path)
 end
 
 # Detect encoding of incoming XML document
-# NB: this reads the entire file into memory, so it can be large!
 def detect_encoding(path)
   detection = CharlockHolmes::EncodingDetector.detect(File.read(path))
   detection[:encoding]  
