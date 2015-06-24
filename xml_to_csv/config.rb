@@ -1,13 +1,13 @@
 # Descriptions
-PATH_TO_XML = "./private_data/descriptions.xml"
-PATH_TO_MAPPINGS = "./mappings/descriptions.rb"
+# PATH_TO_XML = "./private_data/descriptions.xml"
+# PATH_TO_MAPPINGS = "./mappings/descriptions.rb"
 
 # # Authorities
-# PATH_TO_XML = "./private_data/auth-utf8.xml"
+PATH_TO_XML = "./private_data/authorities.xml"
 # PATH_TO_MAPPINGS = "./mappings/authorities.rb"
 
 # # Accessions
-# PATH_TO_XML = "./private_data/MIN_ACCESSION.xml"
+# PATH_TO_XML = "./private_data/accessions.xml"
 # PATH_TO_MAPPINGS = "./mappings/accessions.rb"
 
 # Test
