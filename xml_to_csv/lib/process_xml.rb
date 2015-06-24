@@ -1,5 +1,4 @@
 require 'sax-machine'
-require 'parallel'
 require 'ox'
 
 SAXMachine.handler = :ox
@@ -18,7 +17,6 @@ def process_xml(klass, path)
 
   puts "Processing #{record_set.records.count} record nodes ..."
 
-  # Parallel.each(record_set.records) do |record|
   record_set.records.map do |record|
     record.class.column_names.map { |col| record.send(col) }
   end

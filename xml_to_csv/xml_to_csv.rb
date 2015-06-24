@@ -1,6 +1,5 @@
 require 'pry'
 require 'benchmark'
-
 require 'csv'
 
 Dir[File.dirname(__FILE__) + '/lib/**/*.rb'].each {|file| require file }
@@ -13,37 +12,30 @@ config = {
          }
 
 config.each do |klass, path|
-  puts "\n\nBegin preprocessing #{path} ..."
+  puts "\n\nBegin Processing #{path} ..."
 
-  # Pre-process each input XML file
-  tempfile = nil
   total_elapsed = Benchmark.realtime do
+    # Pre-process each input XML file
     tempfile = preprocess_xml(path)
-  end 
 
-  puts "Preprocessing complete in #{total_elapsed}s\n\n"  
-  puts "Begin processing #{tempfile.path} ..."
-
-  # Process the XML file to use for CSV creation
-  rows = nil
-  total_elapsed = Benchmark.realtime do
+    # Process the XML file to use for CSV creation
     # NB: this will return a potentially large array
     rows = process_xml(klass, tempfile)
+
+    process_rows!(rows)
+
+    outfile = path + '.csv'
+    puts "Writing #{rows.count} rows to #{outfile} ..."
+
+    CSV.open(outfile, 'w') do |csv|
+    	csv << klass.column_names.map(&:to_s)
+      rows.each {|row| csv << row}
+    end
+    
+    # TODO: sort / re-order rows for proper import ordering
   end
 
-  process_rows!(rows)
-  
   puts "Processing complete in #{total_elapsed}s\n\n"
-
-  outfile = path + '.csv'
-  puts "Writing #{rows.count} rows to #{outfile} ..."
-
-  CSV.open(outfile, 'w') do |csv|
-  	csv << klass.column_names.map(&:to_s)
-    rows.each {|row| csv << row}
-  end
-
-  puts "Conversion complete.\n\n"
 end
 
 exit
