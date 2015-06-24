@@ -1,14 +1,23 @@
+require 'pry'
 require 'benchmark'
-#require 'ruby-prof'
+require 'parallel'
 
 require 'csv'
+require 'sax-machine'
+
+# NB: Only one of the following are required
 #require 'nokogiri'
-require 'parallel'
-require 'ox'
+#require 'ox'
+require 'oga'
 
 require './config.rb'
 require './preprocess_xml.rb'
 require PATH_TO_MAPPINGS
+Dir[File.dirname(__FILE__) + '/lib/*.rb'].each {|file| require file }
+
+binding.pry
+
+=begin
 
 def parse_mapping(map, ox_element, concatenator='')
 	col = []
@@ -108,6 +117,8 @@ total_elapsed = Benchmark.realtime do
 	amazing_method(records, roots)
 end
 puts "Completed in #{total_elapsed}s\n\n"
+
+=end
 
 # Forcibly remove temporary files
 FileUtils.rm_rf('./tmp')

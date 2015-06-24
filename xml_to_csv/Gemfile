@@ -1,7 +1,13 @@
 source 'https://rubygems.org'
 
+gem 'pry'
+gem 'benchmark'
+gem 'parallel'
+
+# XML handling gems
+gem 'sax-machine'
 gem 'nokogiri'
 gem 'ox'
+gem 'oga'
+
 gem 'charlock_holmes'
-gem 'parallel'
-gem 'sax-machine'
