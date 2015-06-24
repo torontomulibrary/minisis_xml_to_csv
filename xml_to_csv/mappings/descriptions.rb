@@ -1,4 +1,3 @@
-
 @mappings = {
 	:legacyId => {
 		:map => ['REFD']
@@ -23,8 +22,14 @@
 		:map => ['LEVEL_DESC']
 	},
 	:identifier => {
-		:map => ['OTHER_CODES'],
+		:map => ['REFD'],
 		:concatenator => '|'
+	},
+	:creators => {
+		:map => {
+			:element => "ORIGINATION_GRP",
+			:map => ['*']
+		}
 	},
 	:creatorDates => {
 		:map => ['DATE_CR_INC', 'DATE_CR_PRED'],
@@ -34,11 +39,11 @@
 		:map => ['PHYSICAL_DESC']
 	},
 	:radPublishersSeriesNote => {
-		:map => ['PUBLISHER_SERIES', 'PLACE_OF_PUB', 'EDITION'],
+		:map => ['PUBLISHER_SERIES'],
 		:concatenator => '\n'
 	},
 	:radNoteOnPublishersSeries => {
-		:map => ['PUBLISHER_SERIES', 'PLACE_OF_PUB', 'EDITION'],
+		:map => ['PUBLISHER_SERIES'],
 		:concatenator => '|'
 	},
 	:archivalHistory => {
@@ -48,16 +53,25 @@
 		:map => ['SCOPE']
 	},
 	:physicalCharacteristics => {
-		:map => ['PHYSICAL_COND']
+		:map => ['PHYSICAL_COND', 'CONDITION_NOTES']
 	},
 	:acquisition => {
-		:map => ['DONOR']
+		:map => ['IMM_SOURCE_ACQ']
 	},
 	:arrangement => {
 		:map => ['ARRANGEMENT']
 	},
+	:language => {
+		:map => ['LANGUAGE_MAT, LANGUAGE']
+	},
 	:languageNote => {
 		:map => ['LANGUAGE_NOTES']
+	},
+	:locationOfCopies => {
+		:map => {
+			:element => "AVAILABILITY",
+			:map => ["OTHER_FORMATS"]
+		}
 	},
 	:locationOfOriginals => {
 		:map => ['LOC_OF_ORIGINAL']
@@ -69,14 +83,20 @@
 		:map => ['TERMS_GOV_USE']
 	},
 	:findingAids => {
-		:map => ['FINDAID']
+		:map => {
+			:element => 'FINDAID_GRP',
+			:map => ['FINDAID']
+		}
 	},
 	:relatedUnitsOfDescription => {
 		:map => ['ASSOCIATED_MAT', 'RELATED_MAT'],
 		:concatenator => '\n'
 	},
 	:accruals => {
-		:map => ['ACCRUAL_NOTES']
+		:map => ['ACCRUALS_NOTES']
+	},
+	:radGeneralMaterialDesignation => {
+		:map => ['MEDIUM', 'SMD', 'FORM']
 	},
 	:radNoteAccompanyingMaterial => {
 		:map => ['ACCOMPANYING_MAT']
@@ -88,15 +108,21 @@
 		:map => ['PHYS_DESC_NOTES']
 	},
 	:radNoteGeneral => {
-		:map => ['NOTES', 'OTHER_FORMATS'],
+		:map => ['NOTES', 'REFERENCE_REF', 'CREDITS', 'MODE_OR_PROCESS', 'TECHNICAL_SPECS', 'SOUND_CHAR'],
 		:concatenator => '\n'
 	},
+	:radNoteRights => {
+		:map => ['COPYRIGHT_NOTES']
+	},
+	:placeAccessPoints => {
+		:map => ['LOC_GEOG']
+	},
 	:subjectAccessPoints => {
-		:map => ['INDEXSUB'],
+		:map => ['SUBJECT', 'INDEXSUB'],
 		:concatenator => '|'
 	},
 	:nameAccessPoints => {
-		:map => ['INDEXPROV', 'PUBLISHER'],
+		:map => ['INDEXPROV', 'PUBLISHER', 'ARCHITECT', 'OTHERS_RESP'],
 		:concatenator => '|'
 	},
 	:publicationStatus => {
@@ -109,7 +135,15 @@
 	:radNoteSignatures => {
 		:map => ['SIGNATURES']
 	},
+	:radEdition => {
+		:map => ['EDITION']
+	},
 	:accessionNumber => {
-		:map => ['D_ACCNO']
+		:map => {
+			:element => 'ACCESSION_GRP',
+			:map => ['D_ACCNO'],
+			:concatenator => '\n'
+		},
+		:concatenator => '\n'
 	}
 }
