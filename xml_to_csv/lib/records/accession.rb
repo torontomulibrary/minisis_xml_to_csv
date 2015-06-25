@@ -1,17 +1,15 @@
 class Accession
   include SAXMachine
 
-  # class methods
-  def self.maps
-    {
-      creators: %i[_creators1 _creators2],
-      locationInformation: %i[_locationInformation1 _locationInformation2],
-      processingNotes: %i[_processingNotes1 _processingNotes2 _processingNotes3 _processingNotes4 _processingNotes5 _processingNotes6 _processingNotes7]
-    }
-  end
+  @@maps = {
+    creators: %i[_creators1 _creators2],
+    locationInformation: %i[_locationInformation1 _locationInformation2],
+    processingNotes: %i[_processingNotes1 _processingNotes2 _processingNotes3 _processingNotes4 _processingNotes5 _processingNotes6 _processingNotes7]
+  }
 
+  # overload class method
   def self.column_names
-    super - maps.values.flatten + maps.keys
+    super - @@maps.values.flatten + @@maps.keys
   end
   
   # Used to generate an accessions CSV file
@@ -34,7 +32,7 @@ class Accession
   element :ACC_CREATOR,  as: :_creators2
 
   def creators(concat = '|')
-    self.class.maps[:creators].map {|s| send(s)}.compact.join(concat)
+    @@maps[:creators].map {|s| send(s)}.compact.join(concat)
   end
 
   # NB: this will take the value from all sub-elements, eg. LOCATION_DETAILS | ?
@@ -42,7 +40,7 @@ class Accession
   element :BUS_UNIT_OWNER, as: :_locationInformation2
 
   def locationInformation(concat = "\n")
-    self.class.maps[:locationInformation].map {|s| send(s)}.compact.join(concat)
+    @@maps[:locationInformation].map {|s| send(s)}.compact.join(concat)
   end
   # NB: this will take the value from all sub-elements ?
   element :DESPATCH_GRP,      as: :_processingNotes1 # FIXME: handle merging
@@ -54,6 +52,6 @@ class Accession
   element :ARC_NOTES,         as: :_processingNotes7
 
   def processingNotes(concat = "\n")
-    self.class.maps[:processingNotes].map {|s| send(s)}.compact.join(concat)
+    @@maps[:processingNotes].map {|s| send(s)}.compact.join(concat)
   end
 end
