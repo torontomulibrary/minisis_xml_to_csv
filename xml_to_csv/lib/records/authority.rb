@@ -1,6 +1,17 @@
 class Authority
   include SAXMachine
 
+  # class methods
+  def self.maps
+    {
+      alternateForm: %i[_alternateForm1 _alternateForm2 _alternateForm3 _alternateForm4]
+    }
+  end
+
+  def self.column_names
+    super - maps.values.flatten + maps.keys
+  end
+
   # Used to generate an authorities CSV file
   element :AUTHORITY_TYPE,  as: :typeOfEntity
   element :HEADING,         as: :authorizedFormOfName
@@ -15,12 +26,8 @@ class Authority
   element :PREDECESSOR,     as: :_alternateForm2
   element :SUCCESSOR,       as: :_alternateForm3
   element :PARALLEL_NAME,   as: :_alternateForm4
-  
+
   def alternateForm(concat = '|')
-    [_alternateForm1, _alternateForm2, _alternateForm3, _alternateForm4].compact.join(concat)
-  end
-  
-  def self.column_names
-    super - %i(_alternateForm1 _alternateForm2 _alternateForm3 _alternateForm4) << :alternateForm
+    self.class.maps[:alternateForm].map {|s| send(s)}.compact.join(concat)
   end
 end
