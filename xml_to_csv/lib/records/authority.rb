@@ -11,8 +11,16 @@ class Authority
   element :CONTROLLING_GRP, as: :datesOfExistence
 
   # Used to generate an alternate authorities CSV file
-  element :VARIANT_NAME,    as: :alternateForm1
-  element :PREDECESSOR,     as: :alternateForm2
-  element :SUCCESSOR,       as: :alternateForm3
-  element :PARALLEL_NAME,   as: :alternateForm4
+  element :VARIANT_NAME,    as: :_alternateForm1
+  element :PREDECESSOR,     as: :_alternateForm2
+  element :SUCCESSOR,       as: :_alternateForm3
+  element :PARALLEL_NAME,   as: :_alternateForm4
+  
+  def alternateForm(concat = '|')
+    [_alternateForm1, _alternateForm2, _alternateForm3, _alternateForm4].compact.join(concat)
+  end
+  
+  def self.column_names
+    super - %i(_alternateForm1 _alternateForm2 _alternateForm3 _alternateForm4) << :alternateForm
+  end
 end
