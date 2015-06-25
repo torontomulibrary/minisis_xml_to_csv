@@ -12,7 +12,7 @@ def process_xml(klass, path)
   sax_klass = RecordSet.clone
   sax_klass.elements :XML_RECORD, as: :records, class: klass
 
-  xml = File.read(path)
+  xml = File.open(path, "r:UTF-8", &:read)
   record_set = sax_klass.parse(xml)
 
   puts "Processing #{record_set.records.count} record nodes ..."
