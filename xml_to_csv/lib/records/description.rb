@@ -1,3 +1,15 @@
+class AccessionGroup
+  include SAXMachine
+
+  element :D_ACCNO, as: :accessionNumber
+end
+
+class Availability
+  include SAXMachine
+
+  element :OTHER_FORMATS, as: :locationOfCopies
+end
+
 class Description
   include SAXMachine
 
@@ -12,7 +24,9 @@ class Description
     language: %i[_language1 _language2],
     radTitleAttributionsAndConjectures: %i[_radTitleAttributionsAndConjectures1 _radTitleAttributionsAndConjectures2],
     relatedUnitsOfDescription: %i[_relatedUnitsOfDescription1 _relatedUnitsOfDescription2],
-    alternativeIdentifiers: %i[_alternativeIdentifiers1 _alternativeIdentifiers2 _alternativeIdentifiers3 _alternativeIdentifiers4]
+    alternativeIdentifiers: %i[_alternativeIdentifiers1 _alternativeIdentifiers2 _alternativeIdentifiers3 _alternativeIdentifiers4],
+    accessionNumber: %i[ACCESSION_GRP],
+    locationOfCopies: %i[AVAILABILITY]
   }
   
   # overload class method
@@ -20,7 +34,13 @@ class Description
     super - @@maps.values.flatten + @@maps.keys
   end
 
-  element :ACCESSION_GRP,     as: :accessionNumber # FIXME: use sub-element: D_ACCNO
+  # does this work? .. it kinda seems like it does
+  # why does the accession number lose a digit in the csv?
+  element :ACCESSION_GRP,     class: AccessionGroup
+  def accessionNumber
+    send(:ACCESSION_GRP).accessionNumber if !send(:ACCESSION_GRP).nil?
+  end
+
   element :REFD,              as: :legacyId
   element :REFD,              as: :identifier
   element :TITLE,             as: :title
@@ -33,7 +53,13 @@ class Description
   # NB: this will take the value from all sub-elements, eg. ORGANIZATION | INDIVIDUAL
   element :ORIGINATION_GRP,   as: :creators # FIXME: pipe-delimited
   element :COPYRIGHT_NOTE,    as: :radNoteRights
-  element :AVAILABILITY,      as: :locationOfCopies # FIXME: use sub-element: OTHER_FORMATS
+
+  # there can be multiple AVAILABILITY elements per XML_RECORD
+  elements :AVAILABILITY,      class: Availability
+  def locationOfCopies(concat = '|')
+    send(:AVAILABILITY).map { |s| s.locationOfCopies }.compact.join(concat) if !send(:AVAILABILITY).nil?
+  end
+
   element :LOC_GEOG,          as: :placeAccessPoints
   element :SIGNATURES,        as: :radNoteSignatures
   element :TERMS_GOV_USE,     as: :reproductionConditions
@@ -49,7 +75,9 @@ class Description
   element :ACCRUALS_NOTES,    as: :accruals
   element :EDITION,           as: :radEdition
   element :LANGUAGE_NOTES,    as: :languageNote
-  element :FINDAID_GRP,       as: :findingAids # FIXME: use sub-element: FINDAID
+
+  # there can be multiple FINDAID_GRP elements per XML_RECORD
+  elements :FINDAID_GRP,       as: :findingAids # FIXME: use sub-element: FINDAID
   element :LOC_OF_ORIGINAL,   as: :locationOfOriginals
   element :CONSERVATION,      as: :radNoteConservation
 
