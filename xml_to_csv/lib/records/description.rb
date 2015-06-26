@@ -3,6 +3,7 @@ class AccessionGroup
 
   element :D_ACCNO, as: :accessionNumber
 end
+
 class Description
   include SAXMachine
 
@@ -30,7 +31,6 @@ class Description
   # why does the accession number lose a digit in the csv?
   element :ACCESSION_GRP,     class: AccessionGroup
   def accessionNumber
-    puts send(:ACCESSION_GRP).accessionNumber if !send(:ACCESSION_GRP).nil?
     send(:ACCESSION_GRP).accessionNumber if !send(:ACCESSION_GRP).nil?
   end
 
@@ -46,7 +46,13 @@ class Description
   # NB: this will take the value from all sub-elements, eg. ORGANIZATION | INDIVIDUAL
   element :ORIGINATION_GRP,   as: :creators # FIXME: pipe-delimited
   element :COPYRIGHT_NOTE,    as: :radNoteRights
-  element :AVAILABILITY,      as: :locationOfCopies # FIXME: use sub-element: OTHER_FORMATS
+
+  # there can be multiple AVAILABILITY elements per XML_RECORD
+  elements :AVAILABILITY,      class: Availability
+  def locationOfCopies
+    send(:AVAILABILITY).locationOfCopies if !send(:AVAILABILITY).nil?
+  end
+
   element :LOC_GEOG,          as: :placeAccessPoints
   element :SIGNATURES,        as: :radNoteSignatures
   element :TERMS_GOV_USE,     as: :reproductionConditions
@@ -62,7 +68,9 @@ class Description
   element :ACCRUALS_NOTES,    as: :accruals
   element :EDITION,           as: :radEdition
   element :LANGUAGE_NOTES,    as: :languageNote
-  element :FINDAID_GRP,       as: :findingAids # FIXME: use sub-element: FINDAID
+
+  # there can be multiple FINDAID_GRP elements per XML_RECORD
+  elements :FINDAID_GRP,       as: :findingAids # FIXME: use sub-element: FINDAID
   element :LOC_OF_ORIGINAL,   as: :locationOfOriginals
   element :CONSERVATION,      as: :radNoteConservation
 
