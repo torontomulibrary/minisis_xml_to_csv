@@ -22,7 +22,7 @@ class Accession
   element :ACC_SCOPE,         as: :scopeAndContent
 
   # NB: this will take the value from all sub-elements ?
-  element :EX_ACC_GROUP,  as: :PLEASE_FIX # FIXME: sub-elements: EX_ACC_DATE | EX_ACC_NOTES
+  element :EX_ACC_GROUP,  as: :PLEASE_FIX # FIXME: sub-elements: EX_ACC_DATE -> acquisitionDate | EX_ACC_NOTES -> processingNotes
 
   # NB: this will take the value from all sub-elements ?
   element :VALUATION_GROUP, as: :appraisal
