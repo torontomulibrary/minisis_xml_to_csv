@@ -4,6 +4,12 @@ class AccessionGroup
   element :D_ACCNO, as: :accessionNumber
 end
 
+class Availability
+  include SAXMachine
+
+  element :OTHER_FORMATS, as: :locationOfCopies
+end
+
 class Description
   include SAXMachine
 
@@ -19,7 +25,8 @@ class Description
     radTitleAttributionsAndConjectures: %i[_radTitleAttributionsAndConjectures1 _radTitleAttributionsAndConjectures2],
     relatedUnitsOfDescription: %i[_relatedUnitsOfDescription1 _relatedUnitsOfDescription2],
     alternativeIdentifiers: %i[_alternativeIdentifiers1 _alternativeIdentifiers2 _alternativeIdentifiers3 _alternativeIdentifiers4],
-    accessionNumber: %i[ACCESSION_GRP]
+    accessionNumber: %i[ACCESSION_GRP],
+    locationOfCopies: %i[AVAILABILITY]
   }
   
   # overload class method
@@ -49,8 +56,8 @@ class Description
 
   # there can be multiple AVAILABILITY elements per XML_RECORD
   elements :AVAILABILITY,      class: Availability
-  def locationOfCopies
-    send(:AVAILABILITY).locationOfCopies if !send(:AVAILABILITY).nil?
+  def locationOfCopies(concat = '|')
+    send(:AVAILABILITY).map { |s| s.locationOfCopies }.compact.join(concat) if !send(:AVAILABILITY).nil?
   end
 
   element :LOC_GEOG,          as: :placeAccessPoints
