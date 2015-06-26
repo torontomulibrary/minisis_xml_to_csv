@@ -2,6 +2,8 @@ require 'pry'
 require 'benchmark'
 require 'csv'
 
+require 'sax-machine'
+
 Dir[File.dirname(__FILE__) + '/lib/**/*.rb'].each {|file| require file }
 
 # Set class-pathname pairs
