@@ -1,3 +1,8 @@
+class AccessionGroup
+  include SAXMachine
+
+  element :D_ACCNO, as: :accessionNumber
+end
 class Description
   include SAXMachine
 
@@ -12,7 +17,8 @@ class Description
     language: %i[_language1 _language2],
     radTitleAttributionsAndConjectures: %i[_radTitleAttributionsAndConjectures1 _radTitleAttributionsAndConjectures2],
     relatedUnitsOfDescription: %i[_relatedUnitsOfDescription1 _relatedUnitsOfDescription2],
-    alternativeIdentifiers: %i[_alternativeIdentifiers1 _alternativeIdentifiers2 _alternativeIdentifiers3 _alternativeIdentifiers4]
+    alternativeIdentifiers: %i[_alternativeIdentifiers1 _alternativeIdentifiers2 _alternativeIdentifiers3 _alternativeIdentifiers4],
+    accessionNumber: %i[ACCESSION_GRP]
   }
   
   # overload class method
@@ -20,7 +26,14 @@ class Description
     super - @@maps.values.flatten + @@maps.keys
   end
 
-  element :ACCESSION_GRP,     as: :accessionNumber # FIXME: use sub-element: D_ACCNO
+  # does this work? .. it kinda seems like it does
+  # why does the accession number lose a digit in the csv?
+  element :ACCESSION_GRP,     class: AccessionGroup
+  def accessionNumber
+    puts send(:ACCESSION_GRP).accessionNumber if !send(:ACCESSION_GRP).nil?
+    send(:ACCESSION_GRP).accessionNumber if !send(:ACCESSION_GRP).nil?
+  end
+
   element :REFD,              as: :legacyId
   element :REFD,              as: :identifier
   element :TITLE,             as: :title
