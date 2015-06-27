@@ -29,7 +29,7 @@ def process_rows!(rows)
       if value.is_a? String
         # Replace extra whitespaces
         value.strip!
-        value.squeeze! # this is causing double letters go go poof..  do we need it? 2011 becomes 201
+        value.squeeze!(" ")
 
         # Replace incorrect newlines
         value = value.gsub '<br>', "\n"
