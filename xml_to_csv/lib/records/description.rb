@@ -10,6 +10,16 @@ class Availability
   element :OTHER_FORMATS, as: :locationOfCopies
 end
 
+class FindingAids
+  include SAXMachine
+  element :FINDAID, as: :findingAids
+end
+
+class OriginationGroup
+  include SAXMachine
+  element :ORIGINATOR, as: :originator
+end
+
 class Description
   include SAXMachine
 
@@ -26,7 +36,9 @@ class Description
     relatedUnitsOfDescription: %i[_relatedUnitsOfDescription1 _relatedUnitsOfDescription2],
     alternativeIdentifiers: %i[_alternativeIdentifiers1 _alternativeIdentifiers2 _alternativeIdentifiers3 _alternativeIdentifiers4],
     accessionNumber: %i[ACCESSION_GRP],
-    locationOfCopies: %i[AVAILABILITY]
+    locationOfCopies: %i[AVAILABILITY],
+    findingAids: %i[FINDAID_GROUP],
+    creators: %i[ORIGINATION_GRP],
   }
   
   # overload class method
@@ -34,8 +46,6 @@ class Description
     super - @@maps.values.flatten + @@maps.keys
   end
 
-  # does this work? .. it kinda seems like it does
-  # why does the accession number lose a digit in the csv?
   element :ACCESSION_GRP,     class: AccessionGroup
   def accessionNumber
     send(:ACCESSION_GRP).accessionNumber if !send(:ACCESSION_GRP).nil?
@@ -50,11 +60,15 @@ class Description
   element :PHYSICAL_DESC,     as: :extentAndMedium
   element :RESTRICTIONS,      as: :accessConditions
   element :SCOPE,             as: :scopeAndContent
+
   # NB: this will take the value from all sub-elements, eg. ORGANIZATION | INDIVIDUAL
-  element :ORIGINATION_GRP,   as: :creators # FIXME: pipe-delimited
+  elements :ORIGINATION_GRP,  class: OriginationGroup # is there any other sub-element we need?
+  def creators(concat = '|')
+    send(:ORIGINATION_GRP).map { |s| s.originator }.compact.join(concat) if !send(:ORIGINATION_GRP).nil?
+  end
+
   element :COPYRIGHT_NOTE,    as: :radNoteRights
 
-  # there can be multiple AVAILABILITY elements per XML_RECORD
   elements :AVAILABILITY,      class: Availability
   def locationOfCopies(concat = '|')
     send(:AVAILABILITY).map { |s| s.locationOfCopies }.compact.join(concat) if !send(:AVAILABILITY).nil?
@@ -76,8 +90,11 @@ class Description
   element :EDITION,           as: :radEdition
   element :LANGUAGE_NOTES,    as: :languageNote
 
-  # there can be multiple FINDAID_GRP elements per XML_RECORD
-  elements :FINDAID_GRP,       as: :findingAids # FIXME: use sub-element: FINDAID
+  elements :FINDAID_GROUP,    class: FindingAids
+  def findingAids(concat = '|')
+    send(:FINDAID_GROUP).map { |s| s.findingAids }.compact.join(concat) if !send(:FINDAID_GROUP).nil?
+  end
+
   element :LOC_OF_ORIGINAL,   as: :locationOfOriginals
   element :CONSERVATION,      as: :radNoteConservation
 
