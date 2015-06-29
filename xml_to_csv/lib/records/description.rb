@@ -61,8 +61,7 @@ class Description
   element :RESTRICTIONS,      as: :accessConditions
   element :SCOPE,             as: :scopeAndContent
 
-  # NB: this will take the value from all sub-elements, eg. ORGANIZATION | INDIVIDUAL
-  elements :ORIGINATION_GRP,  class: OriginationGroup # is there any other sub-element we need?
+  elements :ORIGINATION_GRP,  class: OriginationGroup
   def creators(concat = '|')
     send(:ORIGINATION_GRP).map { |s| s.originator }.compact.join(concat) if !send(:ORIGINATION_GRP).nil?
   end
