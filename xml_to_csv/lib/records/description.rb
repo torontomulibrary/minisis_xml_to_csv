@@ -24,17 +24,18 @@ class Description
   include SAXMachine
 
   @@maps = {
-    radGeneralMaterialDesignation: %i[_radGeneralMaterialDesignation1 _radGeneralMaterialDesignation2 _radGeneralMaterialDesignation3],
-    subjectAccessPoints: %i[_subjectAccessPoints1 _subjectAccessPoints2],
-    creatorDates: %i[_creatorDates1 _creatorDates2],
-    archivistNote: %i[_archivistNote1 _archivistNote2],
-    nameAccessPoints: %i[_nameAccessPoints1 _nameAccessPoints2 _nameAccessPoints3 _nameAccessPoints4],
-    radNoteGeneral: %i[_radNoteGeneral1 _radNoteGeneral2 _radNoteGeneral3 _radNoteGeneral4 _radNoteGeneral5 _radNoteGeneral6],
-    physicalCharacteristics: %i[_physicalCharacteristics1 _physicalCharacteristics2],
-    language: %i[_language1 _language2],
-    radTitleAttributionsAndConjectures: %i[_radTitleAttributionsAndConjectures1 _radTitleAttributionsAndConjectures2],
-    relatedUnitsOfDescription: %i[_relatedUnitsOfDescription1 _relatedUnitsOfDescription2],
-    alternativeIdentifiers: %i[_alternativeIdentifiers1 _alternativeIdentifiers2 _alternativeIdentifiers3 _alternativeIdentifiers4],
+    radGeneralMaterialDesignation: %i[MEDIUM SMD FORM],
+    subjectAccessPoints: %i[SUBJECT INDEXSUB],
+    creatorDates: %i[DATE_CR_INC DATE_CR_PRED],
+    archivistNote: %i[BOX_NO COMMENTS_DESC],
+    nameAccessPoints: %i[PUBLISHER INDEXPROV ARCHITECT OTHERS_RESP],
+    radNoteGeneral: %i[NOTES REFERENCE_REF CREDITS 
+                    MODE_OR_PROCESS TECHNICAL_SPEC SOUND_CHAR],
+    physicalCharacteristics: %i[PHYSICAL_COND CONDITION_NOTES],
+    language: %i[LANGUAGE LANGUAGE_MAT],
+    radTitleAttributionsAndConjectures: %i[TITLE_NOTES ATTRIBUTIONS],
+    relatedUnitsOfDescription: %i[RELATED_MAT ASSOCIATED_MAT],
+    alternativeIdentifiers: %i[STANDARD_NUMBER ISBN OTHER_CODES AV_NUMBER],
     accessionNumber: %i[ACCESSION_GRP],
     locationOfCopies: %i[AVAILABILITY],
     findingAids: %i[FINDAID_GROUP],
@@ -48,7 +49,7 @@ class Description
 
   element :ACCESSION_GRP,     class: AccessionGroup
   def accessionNumber
-    send(:ACCESSION_GRP).accessionNumber if !send(:ACCESSION_GRP).nil?
+    send(:ACCESSION_GRP).accessionNumber unless send(:ACCESSION_GRP).nil?
   end
 
   element :REFD,              as: :legacyId
@@ -63,14 +64,14 @@ class Description
 
   elements :ORIGINATION_GRP,  class: OriginationGroup
   def creators(concat = '|')
-    send(:ORIGINATION_GRP).map { |s| s.originator }.compact.join(concat) if !send(:ORIGINATION_GRP).nil?
+    send(:ORIGINATION_GRP).map { |s| s.originator }.compact.join(concat) unless send(:ORIGINATION_GRP).nil?
   end
 
   element :COPYRIGHT_NOTE,    as: :radNoteRights
 
   elements :AVAILABILITY,      class: Availability
   def locationOfCopies(concat = '|')
-    send(:AVAILABILITY).map { |s| s.locationOfCopies }.compact.join(concat) if !send(:AVAILABILITY).nil?
+    send(:AVAILABILITY).map { |s| s.locationOfCopies }.compact.join(concat) unless send(:AVAILABILITY).nil?
   end
 
   element :LOC_GEOG,          as: :placeAccessPoints
@@ -91,94 +92,97 @@ class Description
 
   elements :FINDAID_GROUP,    class: FindingAids
   def findingAids(concat = '|')
-    send(:FINDAID_GROUP).map { |s| s.findingAids }.compact.join(concat) if !send(:FINDAID_GROUP).nil?
+    send(:FINDAID_GROUP).map { |s| s.findingAids }.compact.join(concat) unless send(:FINDAID_GROUP).nil?
   end
 
   element :LOC_OF_ORIGINAL,   as: :locationOfOriginals
   element :CONSERVATION,      as: :radNoteConservation
 
-  element :DATE_CR_INC,       as: :_creatorDates1
-  element :DATE_CR_PRED,      as: :_creatorDates2
-
+  # merge <DATE_CR_INC>, <DATE_CR_PRED> to column creatorDates
+  element :DATE_CR_INC
+  element :DATE_CR_PRED
   def creatorDates(concat = '|')
     @@maps[:creatorDates].map {|s| send(s)}.compact.join(concat)
   end
 
-  element :NOTES,             as: :_radNoteGeneral1
-  element :REFERENCE_REF,     as: :_radNoteGeneral2
-  element :CREDITS,           as: :_radNoteGeneral3
-  element :MODE_OR_PROCESS,   as: :_radNoteGeneral4
-  element :TECHNICAL_SPEC,    as: :_radNoteGeneral5
-  element :SOUND_CHAR,        as: :_radNoteGeneral6
-
+  # merge <NOTES>, <REFERENCE_REF>, <CREDITS>, <MODE_OR_PROCESS>, 
+  # <TECHNICAL_SPEC>, <SOUND_CHAR>  to column radNoteGeneral
+  element :MODE_OR_PROCESS
+  element :TECHNICAL_SPEC
+  element :SOUND_CHAR
+  elements :NOTES
+  elements :REFERENCE_REF
+  elements :CREDITS
   def radNoteGeneral(concat = '|')
     @@maps[:radNoteGeneral].map {|s| send(s)}.compact.join(concat)
   end
 
-  element :PHYSICAL_COND,     as: :_physicalCharacteristics1
-  element :CONDITION_NOTES,   as: :_physicalCharacteristics2
-  
+  # merge <PHYSICAL_COND>, <CONDITION_NOTES> to column physicalCharacteristics
+  elements :PHYSICAL_COND
+  elements :CONDITION_NOTES
   def physicalCharacteristics(concat = '|')
     @@maps[:physicalCharacteristics].map {|s| send(s)}.compact.join(concat)
   end
 
-  element :LANGUAGE_MAT,      as: :_language1
-  element :LANGUAGE,          as: :_language2
-
+  # merge <LANGUAGE_MAT>, <LANGUAGE> to column language
+  elements :LANGUAGE_MAT
+  elements :LANGUAGE
   def language(concat = '|')
     @@maps[:language].map {|s| send(s)}.compact.join(concat)
   end
 
-  element :TITLE_NOTES,       as: :_radTitleAttributionsAndConjectures1
-  element :ATTRIBUTIONS,      as: :_radTitleAttributionsAndConjectures2
-
+  # merge <TITLE_NOTES>, <ATTRIBUTIONS> to column radTitleAttributionsAndConjectures
+  element :ATTRIBUTIONS
+  elements :TITLE_NOTES
   def radTitleAttributionsAndConjectures(concat = '|')
     @@maps[:radTitleAttributionsAndConjectures].map {|s| send(s)}.compact.join(concat)
   end
 
-  element :RELATED_MAT,       as: :_relatedUnitsOfDescription1
-  element :ASSOCIATED_MAT,    as: :_relatedUnitsOfDescription2
-
+  # merge <RELATED_MAT>, <ASSOCIATED_MAT> to column relatedUnitsOfDescription
+  elements :RELATED_MAT
+  elements :ASSOCIATED_MAT
   def relatedUnitsOfDescription(concat = '|')
     @@maps[:relatedUnitsOfDescription].map {|s| send(s)}.compact.join(concat)
   end
 
-  element :STANDARD_NUMBER,   as: :_alternativeIdentifiers1
-  element :ISBN,              as: :_alternativeIdentifiers2
-  element :OTHER_CODES,       as: :_alternativeIdentifiers3
-  element :AV_NUMBER,         as: :_alternativeIdentifiers4
-
+  # merge <STANDARD_NUMBER>, <ISBN>, <OTHER_CODES>, <AV_NUMBER> 
+  # to column alternativeIdentifiers
+  element :STANDARD_NUMBER
+  element :AV_NUMBER
+  elements :ISBN
+  elements :OTHER_CODES
   def alternativeIdentifiers(concat = '|')
     @@maps[:alternativeIdentifiers].map {|s| send(s)}.compact.join(concat)
   end
 
-  element :SUBJECT,           as: :_subjectAccessPoints1
-  element :INDEXSUB,          as: :_subjectAccessPoints2
-
+  # merge <SUBJECT>, <INDEXSUB> to column subjectAccessPoints
+  elements :SUBJECT
+  elements :INDEXSUB
   def subjectAccessPoints(concat = '|')
     @@maps[:subjectAccessPoints].map {|s| send(s)}.compact.join(concat)
   end
 
-  element :INDEXPROV,         as: :_nameAccessPoints1
-  element :ARCHITECT,         as: :_nameAccessPoints2
-  element :PUBLISHER,         as: :_nameAccessPoints3
-  element :OTHERS_RESP,       as: :_nameAccessPoints4
-
+  # merge <PUBLISHER>, <INDEXPROV>, <ARCHITECT>, <OTHERS_RESP> 
+  # to column nameAccessPoints
+  element :PUBLISHER
+  elements :INDEXPROV
+  elements :ARCHITECT
+  elements :OTHERS_RESP
   def nameAccessPoints(concat = '|')
     @@maps[:nameAccessPoints].map {|s| send(s)}.compact.join(concat)
   end
 
-  element :MEDIUM,            as: :_radGeneralMaterialDesignation1
-  element :SMD,               as: :_radGeneralMaterialDesignation2
-  element :FORM,              as: :_radGeneralMaterialDesignation3
-
+  # merge <MEDIUM>, <SMD>, <FORM> to column radGeneralMaterialDesignation
+  elements :MEDIUM
+  elements :SMD
+  elements :FORM
   def radGeneralMaterialDesignation(concat = '|')
     @@maps[:radGeneralMaterialDesignation].map {|s| send(s)}.compact.join(concat)
   end
 
-  element :BOX_NO,            as: :_archivistNote1
-  element :COMMENTS_DESC,     as: :_archivistNote2
-
+  # merge <BOX_NO>, <COMMENTS_DESC> to column archivistNote
+  elements :BOX_NO
+  elements :COMMENTS_DESC
   def archivistNote(concat = '|')
     @@maps[:archivistNote].map {|s| send(s)}.compact.join(concat)
   end
