@@ -1,20 +1,21 @@
 <record_set>
 	<XML_RECORD>
-		<REFD>1</REFD>
-	</XML_RECORD>
-	<XML_RECORD>
-		<REFD>2</REFD>
-		<REFD_HIGHER>1</REFD_HIGHER>
-	</XML_RECORD>
-	<XML_RECORD>
-		<REFD>3</REFD>
-	</XML_RECORD>
-	<XML_RECORD>
-		<REFD>4</REFD>
-		<REFD_HIGHER>1</REFD_HIGHER>
-	</XML_RECORD>
-	<XML_RECORD>
-		<REFD>5</REFD>
-		<REFD_HIGHER>2</REFD_HIGHER>
+		<single>single</single>
+		<multiple occ="1">multiple occ 1</multiple>
+		<multiple occ="2">multiple occ 2</multiple>
+		<nested>
+			<first>nested/first</first>
+			<second>nested/second</second>
+		</nested>
+		<multiple_nested occ="1">
+			<first>multiple_nested occ 1/first</first>
+			<second>multiple_nested occ 1/second</second>
+		</multiple_nested>
+		<multiple_nested occ="2">
+			<first>multiple_nested occ 2/first</first>
+			<second>multiple_nested occ 2/second</second>
+		</multiple_nested>
+		<merge1>merge1</merge1>
+		<merge2>merge2</merge2>
 	</XML_RECORD>
 </record_set>
