@@ -19,7 +19,7 @@ def preprocess_xml(path)
   end
 
   # Match all record elements that we want to process
-  records = doc.xpath('//XML_RECORD')
+  records = doc.xpath('record_set/XML_RECORD')
 
   puts "Preprocessing #{records.count} record nodes ..."
 
