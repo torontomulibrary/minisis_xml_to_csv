@@ -15,6 +15,7 @@ class Test
     multiple: %i[_multiple],
     multiple_nested: %i[_multiple_nested],
     merge: %i[_merge1 _merge2],
+    multiple_merge: %i[_multiple _multiple_nested]
   }
 
   # overload class method
@@ -45,6 +46,11 @@ class Test
   element :merge2,  as: :_merge2
   def merge(concat = '|')
     @@maps[:merge].map {|s| send(s)}.compact.join(concat)
+  end
+
+  # mapping elements with multiple instances to single column
+  def multiple_merge(concat = '|')
+    @@maps[:multiple_merge].map {|s| send(s)}.compact.join(concat)
   end
 
 end
