@@ -1,31 +1,57 @@
+class ControllingGroup
+  include SAXMachine
+
+  element :DATE_CONTROLLED
+  element :CONT_AGENCY
+
+  def to_s
+    return self.class.column_names.map { |col| send(col) }.compact.join("|")
+  end
+end
+
 class Authority
   include SAXMachine
 
+  # Define the columns we want in the CSV file
   @@maps = {
-    alternateForm: %i[_alternateForm1 _alternateForm2 _alternateForm3 _alternateForm4]
+    alternateForm: %i[VARIANT_NAME PREDECESSOR SUCCESSOR PARALLEL_NAME],
+    authorizedFormOfName: %i[HEADING],
+    datesOfExistence: %i[CONTROLLING_GRP],
+    history: %i[ADMIN_HISTORY],
+    status: %i[STATUSA],
+    typeOfEntity: %i[AUTHORITY_TYPE],
   }
+
+ # generate a method for each mapping so we can call it with saxrecord.mapname
+  @@maps.each do |map,value|
+    define_method(map) { value.map { |s| send(s) }.compact.join('|') }
+  end
 
   # overload class method
   def self.column_names
     super - @@maps.values.flatten + @@maps.keys
   end
 
-  # Used to generate an authorities CSV file
-  element :AUTHORITY_TYPE,  as: :typeOfEntity
-  element :HEADING,         as: :authorizedFormOfName
-  element :ADMIN_HISTORY,   as: :history
-  element :STATUSA,         as: :status
-
-  # NB: this will take the value from all sub-elements, eg. DATE_CONTROLLED
-  element :CONTROLLING_GRP, as: :datesOfExistence
-
-  # Used to generate an alternate authorities CSV file
-  element :VARIANT_NAME,    as: :_alternateForm1
-  element :PREDECESSOR,     as: :_alternateForm2
-  element :SUCCESSOR,       as: :_alternateForm3
-  element :PARALLEL_NAME,   as: :_alternateForm4
-
-  def alternateForm(concat = '|')
-    @@maps[:alternateForm].map {|s| send(s)}.compact.join(concat)
-  end
+  # Define the elements that we want to pull out of the XML file
+  # NB: each element/elements we add will be also added to column_names
+  elements :ADMIN_HISTORY
+  # element :ARCHIVIST_AUTH
+  # element :AUTH_ENTRY_DATE
+  # element :AUTH_INPUT_BY
+  # element :AUTHORITY_CATGRY
+  elements :AUTHORITY_TYPE
+  # element :BRIEF_BIO
+  # elements :COMMENTS_AUTH
+  elements :CONTROLLING_GRP, class: ControllingGroup
+  element :HEADING
+  # element :HEADING2
+  elements :PARALLEL_NAME
+  elements :PREDECESSOR
+  # element :SISN
+  # elements :SOURCE
+  element :STATUSA
+  elements :SUCCESSOR
+  elements :VARIANT_NAME
+  # element :WEBA
 end
+
