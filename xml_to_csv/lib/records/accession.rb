@@ -104,7 +104,7 @@ class Accession
 
   # overload class method
   def self.column_names
-    super - @@maps.values.flatten + @@maps.keys
+    @@maps.keys
   end
 
   # Define the elements that we want to pull out of the XML file

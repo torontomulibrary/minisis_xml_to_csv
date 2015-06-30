@@ -101,7 +101,7 @@ class Description
     extentAndMedium: %i[PHYSICAL_DESC],
     findingAids: %i[FINDAID],
     identifier: %i[REFD],
-    language: %i[LANGUAGE LANGUAGE_MATU],
+    language: %i[LANGUAGE LANGUAGE_MAT],
     languageNote: %i[LANGUAGE_NOTES],
     legacyId: %i[REFD],
     levelOfDescription: %i[LEVEL_DESC],
@@ -119,7 +119,7 @@ class Description
     radNoteGeneral: %i[NOTES REFERENCE_REF CREDITS MODE_OR_PROCESS TECHNICAL_SPEC SOUND_CHAR],
     radNoteOnPublishersSeries: %i[PUBLISHER_SERIES],
     radNotePhysicalDescription: %i[PHYS_DESC_NOTES],
-    radNoteRights: %i[COPYRIGHT_NOTE],
+    radNoteRights: %i[COPYRGHT_NOTE],
     radNoteSignatures: %i[SIGNATURES],
     radPublishersSeriesNote: %i[PUBLISHER_SERIES],
     radTitleAttributionsAndConjectures: %i[TITLE_NOTES ATTRIBUTIONS],
@@ -138,7 +138,6 @@ class Description
 
   # overload class method
   def self.column_names
-    # super - @@maps.values.flatten + @@maps.keys
     @@maps.keys
   end
 
@@ -243,7 +242,6 @@ class Description
   element :TOP_LEVEL_FLAG
   element :TRANSLATE_EXIST
   element :WEBD
-
 
   # methods for special cases (i.e.: nested elements)
   def D_ACCNO(concat = '|')
