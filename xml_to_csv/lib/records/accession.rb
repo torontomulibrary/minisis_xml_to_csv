@@ -1,57 +1,140 @@
+class DespatchGroup
+  include SAXMachine
+
+  element :DESPATCHER
+  element :REASON_DESPATCH
+  element :DISPOSAL_DATE
+  element :DEACCESSION_NOTE
+  element :DEACC_DOC_GRP
+  element :APPROVED_BY
+  element :APPROVED_DATE
+  element :LEGAL_RIGHT
+  element :DES_REC_BY
+
+  #TODO: override to_s to return a string with all elements in me
+end
+
+class DonorGroup
+  include SAXMachine
+
+  element :ORGANIZATION
+  element :INDIVIDUAL
+  element :CONTACT
+
+  #TODO: override to_s to return a string with all elements in me
+end
+
+class ExAccGroup
+  include SAXMachine
+
+  element :EX_ACC_DATE
+  element :EX_ACC_NOTES
+
+  #TODO: override to_s to return a string with all elements in me
+end  
+
+class LocationGroup
+  include SAXMachine
+
+  element :LOCATION_DETAILS
+  element :BOX_ITEM_NUMBER
+  element :ITEM_DESC_REF
+  element :BOXLIST_LINK
+  element :ACC_LOC_CODE
+  element :LOCATION_EXTENT
+  element :LOCATION_UNIT
+  element :BARCODE_DATE
+
+  #TODO: override to_s to return a string with all elements in me
+end
+
+class ValuationGroup
+  include SAXMachine
+
+  element :PURCHASE_PRICE
+  element :PURCHASE_CUR
+  element :VALUATION_DATE
+  element :VAL_DATE
+  element :EST_VAL_CUR
+  element :VAL_AMOUNT
+  element :VALUATION
+  element :VALUE_CUR
+  element :VALUATION_TYPE
+  element :VALUER
+  element :VALUATION2_TYPE
+  element :VALUATION_NOTICE
+  element :VAL_REN_DATE
+
+  #TODO: override to_s to return a string with all elements in me
+end
+
 class Accession
   include SAXMachine
 
+  # Define the columns we want in the CSV file
   @@maps = {
-    creators: %i[_creators1 _creators2],
-    locationInformation: %i[_locationInformation1 _locationInformation2],
-    processingNotes: %i[_processingNotes1 _processingNotes2 _processingNotes3 _processingNotes4 _processingNotes5 _processingNotes6 _processingNotes7]
+    accessionNumber: %i[ACCNO],
+    acquisitionDate: %i[RECDATE EX_ACC_DATE], 
+    acquisitionType: %i[ACQUISITION_TYPE],
+    appraisal: %i[VALUATION_GROUP],
+    creators: %i[ACC_CREATOR DONOR_GROUP], 
+    locationInformation: %i[BUS_UNIT_OWNER LOCATION_DETAILS],
+    processingNotes: %i[EXTENT_KEPT COMMENTS_ACC ARRANGEMNT_NOTES 
+                     PROCESSING_NOTES ARC_NOTES DESPATCH_GRP EX_ACC_NOTES],
+    processingStatus: %i[R_STATUS PROC_STATUS],
+    receivedExtentUnits: %i[EXTENT],
+    scopeAndContent: %i[ACC_SCOPE],
+    title: %i[ACC_TITLE],
   }
+
+  # generate a method for each mapping so we can call it with saxrecord.mapname
+  @@maps.each do |map,value|
+    define_method(map) { value.map { |s| send(s) }.compact.join('|') }
+  end
 
   # overload class method
   def self.column_names
     super - @@maps.values.flatten + @@maps.keys
   end
-  
-  # Used to generate an accessions CSV file
-  element :EXTENT,            as: :receivedExtentUnits
-  element :ACCNO,             as: :accessionNumber
-  element :ACC_TITLE,         as: :title
-  element :RECDATE,           as: :acquisitionDate
-  element :ACQUISITION_TYPE,  as: :acquisitionType
-  element :R_STATUS,          as: :processingStatus
-  element :ACC_SCOPE,         as: :scopeAndContent
 
-  # NB: this will take the value from all sub-elements ?
-  element :EX_ACC_GROUP,  as: :PLEASE_FIX # FIXME: sub-elements: EX_ACC_DATE -> acquisitionDate | EX_ACC_NOTES -> processingNotes
+  # Define the elements that we want to pull out of the XML file
+  # NB: each element/elements we add will be also added to column_names
+  elements  :ACC_CREATOR
+  element   :ACC_SCOPE
+  element   :ACC_TITLE
+  element   :ACCNO
+  element   :ACQUISITION_TYPE
+  elements  :ARC_NOTES
+  elements  :ARRANGEMNT_NOTES
+  element   :BUS_UNIT_OWNER
+  elements  :COMMENTS_ACC
+  elements  :DESPATCH_GRP, class: DespatchGroup
+  elements  :DONOR_GROUP, class: DonorGroup
+  elements  :EX_ACC_GROUP, class: ExAccGroup
+  elements  :EXTENT
+  elements  :EXTENT_KEPT
+  elements  :LOCATION_GROUP, class: LocationGroup
+  element   :PROC_STATUS
+  elements  :PROCESSING_NOTES
+  element   :R_STATUS
+  element   :RECDATE
+  elements  :VALUATION_GROUP, class: ValuationGroup
 
-  # NB: this will take the value from all sub-elements ?
-  element :VALUATION_GROUP, as: :appraisal
+  # methods for special cases (i.e.: nested elements)
+  def EX_ACC_DATE(concat = '|')
+    parent = send(:EX_ACC_GROUP)
+    parent.map { |r| r.EX_ACC_DATE }.compact.join(concat) unless parent.nil?
+  end  
 
-  # NB: this will take the value from all sub-elements, eg. ORGANIZATION | INDIVIDUAL
-  element :DONOR_GROUP,  as: :_creators1
-  element :ACC_CREATOR,  as: :_creators2
-
-  def creators(concat = '|')
-    @@maps[:creators].map {|s| send(s)}.compact.join(concat)
+  def EX_ACC_NOTES(concat = '|')
+    parent = send(:EX_ACC_GROUP)
+    parent.map { |r| r.EX_ACC_NOTES }.compact.join(concat) unless parent.nil?
   end
 
-  # NB: this will take the value from all sub-elements, eg. LOCATION_DETAILS | ?
-  element :LOCATION_GROUP, as: :_locationInformation1
-  element :BUS_UNIT_OWNER, as: :_locationInformation2
-
-  def locationInformation(concat = "\n")
-    @@maps[:locationInformation].map {|s| send(s)}.compact.join(concat)
+  def LOCATION_DETAILS(concat = '|')
+    parent = send(:LOCATION_GROUP)
+    parent.map { |r| r.LOCATION_DETAILS }.compact.join(concat) unless parent.nil?
   end
-  # NB: this will take the value from all sub-elements ?
-  element :DESPATCH_GRP,      as: :_processingNotes1 # FIXME: handle merging
-  element :EXTENT_KEPT,       as: :_processingNotes2
-  element :COMMENTS_ACC,      as: :_processingNotes3
-  element :PROC_STATUS,       as: :_processingNotes4
-  element :ARRANGEMENT_NOTES, as: :_processingNotes5
-  element :PROCESSING_NOTES,  as: :_processingNotes6
-  element :ARC_NOTES,         as: :_processingNotes7
 
-  def processingNotes(concat = "\n")
-    @@maps[:processingNotes].map {|s| send(s)}.compact.join(concat)
-  end
+  # 
 end
