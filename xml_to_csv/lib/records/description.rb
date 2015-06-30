@@ -5,48 +5,49 @@ class Description
 
   # Define the columns we want in the CSV file
   @@maps = {
-    accessConditions: %i[RESTRICTIONS],
-    accessionNumber: %i[D_ACCNO],
-    accruals: %i[ACCRUALS_NOTES],
-    acquisition: %i[IMM_SOURCE_ACQ],
-    alternateTitle: %i[PARALLEL_TITLE],
+    accessConditions:       %i[RESTRICTIONS],
+    accessionNumber:        %i[D_ACCNO],
+    accruals:               %i[ACCRUALS_NOTES],
+    acquisition:            %i[IMM_SOURCE_ACQ],
+    alternateTitle:         %i[PARALLEL_TITLE],
     alternativeIdentifiers: %i[STANDARD_NUMBER ISBN OTHER_CODES AV_NUMBER],
-    archivalHistory: %i[CUSTODIAL_HIST],
-    archivistNote: %i[BOX_NO COMMENTS_DESC],
-    arrangement: %i[ARRANGEMENT],
-    creatorDates: %i[DATE_CR_INC DATE_CR_PRED],
-    creators: %i[ORIGINATION_GRP],
-    extentAndMedium: %i[PHYSICAL_DESC],
-    findingAids: %i[FINDAID],
-    identifier: %i[REFD],
-    language: %i[LANGUAGE LANGUAGE_MAT],
-    languageNote: %i[LANGUAGE_NOTES],
-    legacyId: %i[REFD],
-    levelOfDescription: %i[LEVEL_DESC],
-    locationOfCopies: %i[OTHER_FORMATS],
-    locationOfOriginals: %i[LOC_OF_ORIGINAL],
-    nameAccessPoints: %i[INDEXPROV ARCHITECT PUBLISHER OTHERS_RESP],
-    parentId: %i[REFD_HIGHER],
-    physicalCharacteristics: %i[PHYSICAL_COND CONDITION_NOTES],
-    placeAccessPoints: %i[LOC_GEOG],
-    publicationStatus: %i[WEBD],
-    radEdition: %i[EDITION],
-    radGeneralMaterialDesignation: %i[MEDIUM SMD FORM],
-    radNoteAccompanyingMaterial: %i[ACCOMPANYING_MAT],
-    radNoteConservation: %i[CONSERVATION],
-    radNoteGeneral: %i[NOTES REFERENCE_REF CREDITS MODE_OR_PROCESS TECHNICAL_SPEC SOUND_CHAR],
-    radNoteOnPublishersSeries: %i[PUBLISHER_SERIES],
-    radNotePhysicalDescription: %i[PHYS_DESC_NOTES],
-    radNoteRights: %i[COPYRGHT_NOTE],
-    radNoteSignatures: %i[SIGNATURES],
-    radPublishersSeriesNote: %i[PUBLISHER_SERIES],
+    archivalHistory:        %i[CUSTODIAL_HIST],
+    archivistNote:          %i[BOX_NO COMMENTS_DESC],
+    arrangement:            %i[ARRANGEMENT],
+    creatorDates:           %i[DATE_CR_INC DATE_CR_PRED],
+    creators:               %i[ORIGINATION_GRP],
+    extentAndMedium:        %i[PHYSICAL_DESC],
+    findingAids:            %i[FINDAID],
+    identifier:             %i[REFD],
+    language:               %i[LANGUAGE LANGUAGE_MAT],
+    languageNote:           %i[LANGUAGE_NOTES],
+    legacyId:               %i[REFD],
+    levelOfDescription:     %i[LEVEL_DESC],
+    locationOfCopies:       %i[OTHER_FORMATS],
+    locationOfOriginals:    %i[LOC_OF_ORIGINAL],
+    nameAccessPoints:       %i[INDEXPROV ARCHITECT PUBLISHER OTHERS_RESP],
+    parentId:               %i[REFD_HIGHER],
+    physicalCharacteristics:  %i[PHYSICAL_COND CONDITION_NOTES],
+    placeAccessPoints:        %i[LOC_GEOG],
+    publicationStatus:        %i[WEBD],
+    radEdition:               %i[EDITION],
+    radGeneralMaterialDesignation:  %i[MEDIUM SMD FORM],
+    radNoteAccompanyingMaterial:    %i[ACCOMPANYING_MAT],
+    radNoteConservation:            %i[CONSERVATION],
+    radNoteGeneral:                 %i[NOTES REFERENCE_REF CREDITS MODE_OR_PROCESS 
+                                      TECHNICAL_SPEC SOUND_CHAR],
+    radNoteOnPublishersSeries:          %i[PUBLISHER_SERIES],
+    radNotePhysicalDescription:         %i[PHYS_DESC_NOTES],
+    radNoteRights:                      %i[COPYRGHT_NOTE],
+    radNoteSignatures:                  %i[SIGNATURES],
+    radPublishersSeriesNote:            %i[PUBLISHER_SERIES],
     radTitleAttributionsAndConjectures: %i[TITLE_NOTES ATTRIBUTIONS],
-    radTitleStatementOfResponsibility: %i[STATEMENT_RESP],
-    relatedUnitsOfDescription: %i[RELATED_MAT ASSOCIATED_MAT],
-    reproductionConditions: %i[TERMS_GOV_USE],
-    scopeAndContent: %i[SCOPE],
-    subjectAccessPoints: %i[SUBJECT INDEXSUB],
-    title: %i[TITLE]
+    radTitleStatementOfResponsibility:  %i[STATEMENT_RESP],
+    relatedUnitsOfDescription:          %i[RELATED_MAT ASSOCIATED_MAT],
+    reproductionConditions:             %i[TERMS_GOV_USE],
+    scopeAndContent:                    %i[SCOPE],
+    subjectAccessPoints:                %i[SUBJECT INDEXSUB],
+    title:                              %i[TITLE]
   }
 
   # generate a method for each mapping so we can call it with saxrecord.mapname
@@ -62,7 +63,7 @@ class Description
   # Define the elements that we want to pull out of the XML file
   # NB: each element/elements we add will be also added to column_names
   element :ABSTRACT
-  elements :ACCESSION_GRP, class: AccessionGroup
+  elements :ACCESSION_GRP,    class: AccessionGroup
   element :ACCOMPANYING_MAT
   element :ACCRUALS_NOTES
   elements :ARCHITECT
@@ -71,7 +72,7 @@ class Description
   elements :ASSOCIATED_MAT
   element :ATTRIBUTIONS
   element :AV_NUMBER
-  elements :AVAILABILITY, class: Availability
+  elements :AVAILABILITY,     class: Availability
   element :AVFILE
   element :BARCODE
   elements :BIO_SKETCH
@@ -96,9 +97,9 @@ class Description
   element :DESC_TYPE
   element :EDITION
   element :ENTRY_DATE
-  elements :FINDAID_GROUP, class: FindaidGroup
+  elements :FINDAID_GROUP,    class: FindaidGroup
   elements :FORM
-  elements :IMAGE_GROUP, class: ImageGroup
+  elements :IMAGE_GROUP,      class: ImageGroup
   elements :IMM_SOURCE_ACQ
   elements :INDEXGEO
   elements :INDEXPROV
@@ -114,13 +115,13 @@ class Description
   element :LOC_GEOG
   element :LOC_OF_ORIGINAL
   elements :LOCATION
-  elements :LOWER_LEVEL, class: LowerLevel
+  elements :LOWER_LEVEL,      class: LowerLevel
   element :M3_ACCNO
   elements :MEDIUM
   element :MODE_OR_PROCESS
   elements :NOTES
   elements :OFFICE_OF_ORIGIN, class: OfficeOfOrigin
-  elements :ORIGINATION_GRP, class: OriginationGroup
+  elements :ORIGINATION_GRP,  class: OriginationGroup
   elements :OTHER_CODES
   elements :OTHER_CONTEXT
   elements :OTHERS_RESP

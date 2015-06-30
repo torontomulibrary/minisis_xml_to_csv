@@ -5,12 +5,12 @@ class Authority
 
   # Define the columns we want in the CSV file
   @@maps = {
-    alternateForm: %i[VARIANT_NAME PREDECESSOR SUCCESSOR PARALLEL_NAME],
-    authorizedFormOfName: %i[HEADING],
-    datesOfExistence: %i[CONTROLLING_GRP],
-    history: %i[ADMIN_HISTORY],
-    status: %i[STATUSA],
-    typeOfEntity: %i[AUTHORITY_TYPE],
+    alternateForm:          %i[VARIANT_NAME PREDECESSOR SUCCESSOR PARALLEL_NAME],
+    authorizedFormOfName:   %i[HEADING],
+    datesOfExistence:       %i[CONTROLLING_GRP],
+    history:                %i[ADMIN_HISTORY],
+    status:                 %i[STATUSA],
+    typeOfEntity:           %i[AUTHORITY_TYPE],
   }
 
  # generate a method for each mapping so we can call it with saxrecord.mapname

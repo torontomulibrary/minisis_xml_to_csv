@@ -5,18 +5,18 @@ class Accession
 
   # Define the columns we want in the CSV file
   @@maps = {
-    accessionNumber: %i[ACCNO],
-    acquisitionDate: %i[RECDATE EX_ACC_DATE], 
-    acquisitionType: %i[ACQUISITION_TYPE],
-    appraisal: %i[VALUATION_GROUP],
-    creators: %i[ACC_CREATOR DONOR_GROUP], 
-    locationInformation: %i[BUS_UNIT_OWNER LOCATION_DETAILS],
-    processingNotes: %i[EXTENT_KEPT COMMENTS_ACC ARRANGEMNT_NOTES 
-                     PROCESSING_NOTES ARC_NOTES DESPATCH_GRP EX_ACC_NOTES],
-    processingStatus: %i[R_STATUS PROC_STATUS],
-    receivedExtentUnits: %i[EXTENT],
-    scopeAndContent: %i[ACC_SCOPE],
-    title: %i[ACC_TITLE],
+    accessionNumber:      %i[ACCNO],
+    acquisitionDate:      %i[RECDATE EX_ACC_DATE], 
+    acquisitionType:      %i[ACQUISITION_TYPE],
+    appraisal:            %i[VALUATION_GROUP],
+    creators:             %i[ACC_CREATOR DONOR_GROUP], 
+    locationInformation:  %i[BUS_UNIT_OWNER LOCATION_DETAILS],
+    processingNotes:      %i[EXTENT_KEPT COMMENTS_ACC ARRANGEMNT_NOTES 
+                            PROCESSING_NOTES ARC_NOTES DESPATCH_GRP EX_ACC_NOTES],
+    processingStatus:     %i[R_STATUS PROC_STATUS],
+    receivedExtentUnits:  %i[EXTENT],
+    scopeAndContent:      %i[ACC_SCOPE],
+    title:                %i[ACC_TITLE],
   }
 
   # generate a method for each mapping so we can call it with saxrecord.mapname
@@ -40,12 +40,12 @@ class Accession
   elements  :ARRANGEMNT_NOTES
   element   :BUS_UNIT_OWNER
   elements  :COMMENTS_ACC
-  elements  :DESPATCH_GRP, class: DespatchGroup
-  elements  :DONOR_GROUP, class: DonorGroup
-  elements  :EX_ACC_GROUP, class: ExAccGroup
+  elements  :DESPATCH_GRP,    class: DespatchGroup
+  elements  :DONOR_GROUP,     class: DonorGroup
+  elements  :EX_ACC_GROUP,    class: ExAccGroup
   elements  :EXTENT
   elements  :EXTENT_KEPT
-  elements  :LOCATION_GROUP, class: LocationGroup
+  elements  :LOCATION_GROUP,  class: LocationGroup
   element   :PROC_STATUS
   elements  :PROCESSING_NOTES
   element   :R_STATUS
