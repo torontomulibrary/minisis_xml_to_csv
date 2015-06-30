@@ -30,6 +30,8 @@ def process_rows!(rows)
         # Replace extra whitespaces
         value.strip!
         value.squeeze!(" ")
+        value.squeeze!("|")
+        value.chomp!("|")
 
         # Replace incorrect newlines
         value = value.gsub '<br>', "\n"
