@@ -11,7 +11,9 @@ class DespatchGroup
   element :LEGAL_RIGHT
   element :DES_REC_BY
 
-  #TODO: override to_s to return a string with all elements in me
+  def to_s
+    return self.class.column_names.map { |col| send(col) }.compact.join("|")
+  end
 end
 
 class DonorGroup
@@ -21,7 +23,9 @@ class DonorGroup
   element :INDIVIDUAL
   element :CONTACT
 
-  #TODO: override to_s to return a string with all elements in me
+  def to_s
+    return self.class.column_names.map { |col| send(col) }.compact.join("|")
+  end
 end
 
 class ExAccGroup
@@ -30,7 +34,9 @@ class ExAccGroup
   element :EX_ACC_DATE
   element :EX_ACC_NOTES
 
-  #TODO: override to_s to return a string with all elements in me
+  def to_s
+    return self.class.column_names.map { |col| send(col) }.compact.join("|")
+  end
 end  
 
 class LocationGroup
@@ -45,7 +51,9 @@ class LocationGroup
   element :LOCATION_UNIT
   element :BARCODE_DATE
 
-  #TODO: override to_s to return a string with all elements in me
+  def to_s
+    return self.class.column_names.map { |col| send(col) }.compact.join("|")
+  end
 end
 
 class ValuationGroup
@@ -65,7 +73,9 @@ class ValuationGroup
   element :VALUATION_NOTICE
   element :VAL_REN_DATE
 
-  #TODO: override to_s to return a string with all elements in me
+  def to_s
+    return self.class.column_names.map { |col| send(col) }.compact.join("|")
+  end
 end
 
 class Accession
@@ -135,6 +145,4 @@ class Accession
     parent = send(:LOCATION_GROUP)
     parent.map { |r| r.LOCATION_DETAILS }.compact.join(concat) unless parent.nil?
   end
-
-  # 
 end
