@@ -62,105 +62,105 @@ class Description
 
   # Define the elements that we want to pull out of the XML file
   # NB: each element/elements we add will be also added to column_names
-  element :ABSTRACT
-  elements :ACCESSION_GRP,    class: AccessionGroup
-  element :ACCOMPANYING_MAT
-  element :ACCRUALS_NOTES
-  elements :ARCHITECT
-  element :ARCHIVIST_DESC
-  elements :ARRANGEMENT
-  elements :ASSOCIATED_MAT
-  element :ATTRIBUTIONS
-  element :AV_NUMBER
-  elements :AVAILABILITY,     class: Availability
-  element :AVFILE
-  element :BARCODE
-  elements :BIO_SKETCH
-  elements :BOX_NO
-  element :CARTO_ADDRESS
-  element :CARTO_CITY
-  element :CARTO_PROV
-  element :COLOUR
-  elements :COMMENTS_DESC
-  elements :CONDITION_NOTES
-  elements :CONSERVATION
-  element :COPYRGHT_NOTE
-  elements :CREATOR
-  elements :CREDITS
-  elements :CUSTODIAL_HIST
-  element :DATE_ACCUM
-  element :DATE_CR_INC
-  element :DATE_CR_PRED
-  element :DATE_NOTES
-  element :DATE_SEARCH
-  element :DESC_SOURCE
-  element :DESC_TYPE
-  element :EDITION
-  element :ENTRY_DATE
-  elements :FINDAID_GROUP,    class: FindaidGroup
-  elements :FORM
-  elements :IMAGE_GROUP,      class: ImageGroup
-  elements :IMM_SOURCE_ACQ
-  elements :INDEXGEO
-  elements :INDEXPROV
-  elements :INDEXSUB
-  element :INPUT_BY
-  elements :ISBN
-  elements :ITEM_EXTENT
-  elements :LANGUAGE
-  element :LANGUAGE_DESC
-  elements :LANGUAGE_MAT
-  element :LANGUAGE_NOTES
-  element :LEVEL_DESC
-  element :LOC_GEOG
-  element :LOC_OF_ORIGINAL
-  elements :LOCATION
-  elements :LOWER_LEVEL,      class: LowerLevel
-  element :M3_ACCNO
-  elements :MEDIUM
-  element :MODE_OR_PROCESS
-  elements :NOTES
-  elements :OFFICE_OF_ORIGIN, class: OfficeOfOrigin
-  elements :ORIGINATION_GRP,  class: OriginationGroup
-  elements :OTHER_CODES
-  elements :OTHER_CONTEXT
-  elements :OTHERS_RESP
-  elements :PARALLEL_TITLE
-  element :PARENT_ACCNO
-  element :PHYS_DESC_NOTES
-  elements :PHYSICAL_COND
-  elements :PHYSICAL_DESC
-  element :PLACE_OF_PUB
-  element :PLAYING_SPEED
-  element :PUBLISHER
-  element :PUBLISHER_SERIES
-  element :REFD
-  element :REFD_HIGHER
-  element :REFD_LOWEREXIST
-  elements :REFERENCE_REF
-  elements :RELATED_MAT
-  elements :RESTRICTIONS
-  element :RYE_GEN_ACCESS
-  elements :SCOPE
-  element :SIGNATURES
-  element :SISN
-  element :SIZE
-  elements :SMD
-  element :SOUND_CHAR
-  elements :SPECIFIC_LOC
-  element :STANDARD_NUMBER
-  element :STATEMENT_RESP
-  element :STATUSD
-  elements :SUBJECT
-  element :TECHNICAL_SPEC
-  elements :TERMS_GOV_USE
-  element :TEXT_IMAGEFILE
-  element :TIME
-  element :TITLE
-  elements :TITLE_NOTES
-  element :TOP_LEVEL_FLAG
-  element :TRANSLATE_EXIST
-  element :WEBD
+  element   :ABSTRACT
+  elements  :ACCESSION_GRP,    class: AccessionGroup
+  element   :ACCOMPANYING_MAT
+  element   :ACCRUALS_NOTES
+  elements  :ARCHITECT
+  element   :ARCHIVIST_DESC
+  elements  :ARRANGEMENT
+  elements  :ASSOCIATED_MAT
+  element   :ATTRIBUTIONS
+  element   :AV_NUMBER
+  elements  :AVAILABILITY,     class: Availability
+  element   :AVFILE
+  element   :BARCODE
+  elements  :BIO_SKETCH
+  elements  :BOX_NO
+  element   :CARTO_ADDRESS
+  element   :CARTO_CITY
+  element   :CARTO_PROV
+  element   :COLOUR
+  elements  :COMMENTS_DESC
+  elements  :CONDITION_NOTES
+  elements  :CONSERVATION
+  element   :COPYRGHT_NOTE
+  elements  :CREATOR
+  elements  :CREDITS
+  elements  :CUSTODIAL_HIST
+  element   :DATE_ACCUM
+  element   :DATE_CR_INC
+  element   :DATE_CR_PRED
+  element   :DATE_NOTES
+  element   :DATE_SEARCH
+  element   :DESC_SOURCE
+  element   :DESC_TYPE
+  element   :EDITION
+  element   :ENTRY_DATE
+  elements  :FINDAID_GROUP,    class: FindaidGroup
+  elements  :FORM
+  elements  :IMAGE_GROUP,      class: ImageGroup
+  elements  :IMM_SOURCE_ACQ
+  elements  :INDEXGEO
+  elements  :INDEXPROV
+  elements  :INDEXSUB
+  element   :INPUT_BY
+  elements  :ISBN
+  elements  :ITEM_EXTENT
+  elements  :LANGUAGE
+  element   :LANGUAGE_DESC
+  elements  :LANGUAGE_MAT
+  element   :LANGUAGE_NOTES
+  element   :LEVEL_DESC
+  element   :LOC_GEOG
+  element   :LOC_OF_ORIGINAL
+  elements  :LOCATION
+  elements  :LOWER_LEVEL,      class: LowerLevel
+  element   :M3_ACCNO
+  elements  :MEDIUM
+  element   :MODE_OR_PROCESS
+  elements  :NOTES
+  elements  :OFFICE_OF_ORIGIN, class: OfficeOfOrigin
+  elements  :ORIGINATION_GRP,  class: OriginationGroup
+  elements  :OTHER_CODES
+  elements  :OTHER_CONTEXT
+  elements  :OTHERS_RESP
+  elements  :PARALLEL_TITLE
+  element   :PARENT_ACCNO
+  element   :PHYS_DESC_NOTES
+  elements  :PHYSICAL_COND
+  elements  :PHYSICAL_DESC
+  element   :PLACE_OF_PUB
+  element   :PLAYING_SPEED
+  element   :PUBLISHER
+  element   :PUBLISHER_SERIES
+  element   :REFD
+  element   :REFD_HIGHER
+  element   :REFD_LOWEREXIST
+  elements  :REFERENCE_REF
+  elements  :RELATED_MAT
+  elements  :RESTRICTIONS
+  element   :RYE_GEN_ACCESS
+  elements  :SCOPE
+  element   :SIGNATURES
+  element   :SISN
+  element   :SIZE
+  elements  :SMD
+  element   :SOUND_CHAR
+  elements  :SPECIFIC_LOC
+  element   :STANDARD_NUMBER
+  element   :STATEMENT_RESP
+  element   :STATUSD
+  elements  :SUBJECT
+  element   :TECHNICAL_SPEC
+  elements  :TERMS_GOV_USE
+  element   :TEXT_IMAGEFILE
+  element   :TIME
+  element   :TITLE
+  elements  :TITLE_NOTES
+  element   :TOP_LEVEL_FLAG
+  element   :TRANSLATE_EXIST
+  element   :WEBD
 
   # methods for special cases (i.e.: nested elements)
   def D_ACCNO(concat = '|')
