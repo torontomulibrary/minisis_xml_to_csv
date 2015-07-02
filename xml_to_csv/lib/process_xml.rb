@@ -32,6 +32,7 @@ def process_rows!(rows)
         value.squeeze!(" ")
         value.squeeze!("|")
         value.chomp!("|")
+        value.sub!(/^[|]*/,'') # remove leading pipes inserted by empty elements
 
         # Replace incorrect newlines
         value = value.gsub '<br>', "\n"
