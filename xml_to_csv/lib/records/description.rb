@@ -5,6 +5,8 @@ class Description
 
   # Define the columns we want in the CSV file
   @@maps = {
+    legacyId:               %i[REFD],
+    parentId:               %i[REFD_HIGHER],
     accessConditions:       %i[RESTRICTIONS],
     accessionNumber:        %i[D_ACCNO],
     accruals:               %i[ACCRUALS_NOTES],
@@ -21,12 +23,10 @@ class Description
     identifier:             %i[REFD],
     language:               %i[LANGUAGE LANGUAGE_MAT],
     languageNote:           %i[LANGUAGE_NOTES],
-    legacyId:               %i[REFD],
     levelOfDescription:     %i[LEVEL_DESC],
     locationOfCopies:       %i[OTHER_FORMATS],
     locationOfOriginals:    %i[LOC_OF_ORIGINAL],
     nameAccessPoints:       %i[INDEXPROV ARCHITECT PUBLISHER OTHERS_RESP],
-    parentId:               %i[REFD_HIGHER],
     physicalCharacteristics:  %i[PHYSICAL_COND CONDITION_NOTES],
     placeAccessPoints:        %i[LOC_GEOG],
     publicationStatus:        %i[WEBD],
