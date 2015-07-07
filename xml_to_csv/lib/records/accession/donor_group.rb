@@ -1,3 +1,4 @@
+# DonorGroup
 class DonorGroup
   include SAXMachine
 
@@ -6,6 +7,6 @@ class DonorGroup
   element :CONTACT
 
   def to_s
-    return self.class.column_names.map { |col| send(col) }.compact.join("|")
+    self.class.column_names.map { |col| send(col) }.compact.join('|')
   end
 end

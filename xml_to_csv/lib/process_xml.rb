@@ -3,6 +3,7 @@ require 'ox'
 
 SAXMachine.handler = :ox
 
+# RecordSet
 class RecordSet
   include SAXMachine
 end
@@ -12,7 +13,7 @@ def process_xml(klass, path)
   sax_klass = RecordSet.clone
   sax_klass.elements :XML_RECORD, as: :records, class: klass
 
-  xml = File.open(path, "r:UTF-8", &:read)
+  xml = File.open(path, 'r:UTF-8', &:read)
   record_set = sax_klass.parse(xml)
 
   puts "Processing #{record_set.records.count} record nodes ..."
@@ -29,15 +30,14 @@ def process_rows!(rows)
       if value.is_a? String
         # Replace extra whitespaces
         value.strip!
-        value.squeeze!(" ")
-        value.squeeze!("|")
-        value.chomp!("|")
-        # value.sub!(/^[|]*/,'') # MJ: we shouldn't use it - "Returns str if a substitution was performed or nil if no substitution was performed."
+        value.squeeze!(' ')
+        value.squeeze!('|')
+        value.chomp!('|')
 
         # Replace incorrect newlines
         value = value.gsub '<br>', "\n"
         value = value.gsub '\\n', "\n"
-        value = value.squeeze("\n")
+        value.squeeze!("\n")
       else
         value
       end

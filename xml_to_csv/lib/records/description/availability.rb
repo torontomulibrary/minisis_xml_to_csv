@@ -1,3 +1,4 @@
+# Availability
 class Availability
   include SAXMachine
 
@@ -5,6 +6,6 @@ class Availability
   element :CALL_NO
 
   def to_s
-    return self.class.column_names.map { |col| send(col) }.compact.join("|")
+    self.class.column_names.map { |col| send(col) }.compact.join('|')
   end
 end

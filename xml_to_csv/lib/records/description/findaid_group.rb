@@ -1,3 +1,4 @@
+# FindaidGroup
 class FindaidGroup
   include SAXMachine
 
@@ -6,6 +7,6 @@ class FindaidGroup
   element :FINDAID_URL
 
   def to_s
-    return self.class.column_names.map { |col| send(col) }.compact.join("|")
+    self.class.column_names.map { |col| send(col) }.compact.join('|')
   end
 end

@@ -1,3 +1,4 @@
+# AccessionGroup
 class AccessionGroup
   include SAXMachine
 
@@ -5,6 +6,6 @@ class AccessionGroup
   element :PROCESSED
 
   def to_s
-    return self.class.column_names.map { |col| send(col) }.compact.join("|")
+    self.class.column_names.map { |col| send(col) }.compact.join('|')
   end
 end

@@ -4,15 +4,15 @@ require 'csv'
 
 require 'sax-machine'
 
-Dir[File.dirname(__FILE__) + '/lib/**/*.rb'].each {|file| require file }
+Dir[File.dirname(__FILE__) + '/lib/**/*.rb'].each { |file| require file }
 
 # Set class-pathname pairs
 config = {
-           Accession => "./private_data/accessions.xml",
-           Authority => "./private_data/authorities.xml",
-           Description => "./private_data/descriptions.xml",
-           # Test => "./test/test_data.xml",
-         }
+  Accession => './private_data/accessions.xml',
+  Authority => './private_data/authorities.xml',
+  Description => './private_data/descriptions.xml',
+  # Test => "./test/test_data.xml",
+}
 
 config.each do |klass, path|
   puts "\n\nBegin Processing #{path} ..."
@@ -31,10 +31,10 @@ config.each do |klass, path|
     puts "Writing #{rows.count} rows to #{outfile} ..."
 
     CSV.open(outfile, 'w') do |csv|
-    	csv << klass.column_names.map(&:to_s)
-      rows.each {|row| csv << row}
+      csv << klass.column_names.map(&:to_s)
+      rows.each { |row| csv << row }
     end
-    
+
     # TODO: sort / re-order rows for proper import ordering
   end
 

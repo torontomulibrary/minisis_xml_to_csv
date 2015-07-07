@@ -1,3 +1,4 @@
+# LowerLevel
 class LowerLevel
   include SAXMachine
 
@@ -6,6 +7,6 @@ class LowerLevel
   element :LOWER_TYPE
 
   def to_s
-    return self.class.column_names.map { |col| send(col) }.compact.join("|")
+    self.class.column_names.map { |col| send(col) }.compact.join('|')
   end
 end

@@ -1,3 +1,4 @@
+# ValuationGroup
 class ValuationGroup
   include SAXMachine
 
@@ -16,6 +17,6 @@ class ValuationGroup
   element :VAL_REN_DATE
 
   def to_s
-    return self.class.column_names.map { |col| send(col) }.compact.join("|")
+    self.class.column_names.map { |col| send(col) }.compact.join('|')
   end
 end

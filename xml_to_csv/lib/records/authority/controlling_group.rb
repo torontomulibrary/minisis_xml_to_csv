@@ -1,3 +1,4 @@
+# ControllingGroup
 class ControllingGroup
   include SAXMachine
 
@@ -5,6 +6,6 @@ class ControllingGroup
   element :CONT_AGENCY
 
   def to_s
-    return self.class.column_names.map { |col| send(col) }.compact.join("|")
+    self.class.column_names.map { |col| send(col) }.compact.join('|')
   end
 end
