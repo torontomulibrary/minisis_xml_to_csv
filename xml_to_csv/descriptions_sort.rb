@@ -38,7 +38,7 @@ puts "Sorted array: #{sorted.count}"
 remain = records - sorted
 puts "Not sorted?.. : #{remain.count}"
 
-CSV.open('./private_data/descriptions.what.csv', 'wb') do |f|
+CSV.open('./private_data/descriptions.dropped.csv', 'wb') do |f|
   f << remain[1].keys
   remain.each { |r| f << r.values }
 end
