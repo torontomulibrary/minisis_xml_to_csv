@@ -37,7 +37,7 @@ def process_rows!(rows)
         # Replace incorrect newlines
         value = value.gsub '<br>', "\n"
         value = value.gsub '\\n', "\n"
-        value.squeeze!("\n")
+        value.squeeze("\n")
       else
         value
       end
