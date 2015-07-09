@@ -3,9 +3,9 @@ require 'csv'
 def sort_it(records, parents)
   return [] if parents.count == 0
 
-  ids = parents.map { |r| r[:legacyid] }
+  ids = parents.map { |r| r['legacyId'] }
 
-  next_level = records.select { |r| ids.include?(r[:parentid]) }
+  next_level = records.select { |r| ids.include?(r['parentId']) }
 
   records -= next_level
   puts "Records remaining: #{records.count}"
@@ -15,16 +15,15 @@ end
 CSV::Converters[:blank_to_nil] = lambda do |field|
   field && field =~ /^\s*$/ ? nil : field
 end
-csv = CSV.new(File.open('./private_data/descriptions.nodup.noorphan.csv'),
+csv = CSV.new(File.open('./dev_output/descriptions.nodup.noorphan.csv'),
               headers: true,
-              header_converters: :symbol,
               converters: [:all, :blank_to_nil]
              )
 
 records = csv.to_a.map(&:to_hash)
 puts "Total records: #{records.count}"
 
-roots = records.select { |r| r[:parentid].nil? }
+roots = records.select { |r| r['parentId'].nil? }
 puts "Found roots: #{roots.count}"
 
 more = records - roots
@@ -38,12 +37,12 @@ puts "Sorted array: #{sorted.count}"
 remain = records - sorted
 puts "Not sorted?.. : #{remain.count}"
 
-CSV.open('./private_data/descriptions.dropped.csv', 'wb') do |f|
+CSV.open('./sort_output/descriptions.dropped.csv', 'wb') do |f|
   f << remain[1].keys
   remain.each { |r| f << r.values }
 end
 
-CSV.open('./private_data/descriptions.sorted.csv', 'wb') do |f|
+CSV.open('./sort_output/descriptions.sorted.csv', 'wb') do |f|
   f << sorted[1].keys
   sorted.each { |r| f << r.values }
 end
