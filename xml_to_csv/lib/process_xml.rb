@@ -31,8 +31,11 @@ def process_rows!(rows)
         # Replace extra whitespaces
         value.strip!
         value.squeeze!(' ')
+
+        # Replace extra pipe delimiters
         value.squeeze!('|')
         value.chomp!('|')
+        value = value.sub(/^[|]*/,'')
 
         # Replace incorrect newlines
         value = value.gsub '<br>', "\n"
