@@ -41,14 +41,13 @@ class Description
     radNoteConservation:            %i(CONSERVATION),
     radNotePhysicalDescription:         %i(PHYS_DESC_NOTES),
     radNoteRights:                      %i(COPYRGHT_NOTE),
-    # should this be radNoteSignaturesInscriptions??
-    radNoteSignatures:                  %i(SIGNATURES),
-    radNoteGeneral:           %i(NOTES REFERENCE_REF CREDITS MODE_OR_PROCESS
-                                 TECHNICAL_SPEC SOUND_CHAR),
-    subjectAccessPoints:                %i(SUBJECT INDEXSUB),
-    placeAccessPoints:        %i(LOC_GEOG),
-    nameAccessPoints:       %i(INDEXPROV ARCHITECT PUBLISHER OTHERS_RESP),
-    publicationStatus:        %i(WEBD),
+    radNoteSignaturesInscriptions:                  %i(SIGNATURES),
+    radNoteGeneral:       %i(NOTES REFERENCE_REF CREDITS MODE_OR_PROCESS
+                             TECHNICAL_SPEC SOUND_CHAR),
+    subjectAccessPoints:  %i(SUBJECT INDEXSUB),
+    placeAccessPoints:    %i(LOC_GEOG),
+    nameAccessPoints:     %i(INDEXPROV ARCHITECT PUBLISHER OTHERS_RESP),
+    publicationStatus:    %i(WEBD),
 
     # what is this one?
     archivistNote:          %i(BOX_NO COMMENTS_DESC)
