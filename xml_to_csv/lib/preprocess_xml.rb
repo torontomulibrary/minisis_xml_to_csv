@@ -30,6 +30,12 @@ def preprocess_xml(path)
 
   puts "Removed #{removed.reduce(:+)} unnecessary nodes."
 
+  # Clean up REFD_HIGHER for newlines, trailing/leading spaces
+  refd_highers = doc.xpath('record_set/XML_RECORD/REFD_HIGHER')
+  refd_highers.each do |refd_higher|
+    refd_higher.content = refd_higher.text.gsub('\n', '').strip
+  end
+
   # Create a tempfile to save the pre-processed XML file
   tempfile = Tempfile.new(Pathname.new(path).basename.to_s)
   output_xml = doc.to_xml(encoding: 'UTF-8', save_with: Nokogiri::XML::Node::SaveOptions::NO_DECLARATION)
