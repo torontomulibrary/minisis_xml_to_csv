@@ -10,8 +10,7 @@ Dir[File.dirname(__FILE__) + '/lib/**/*.rb'].each { |file| require file }
 config = {
   Accession => './private_data/accessions.xml',
   Authority => './private_data/authorities.xml',
-  Description => './private_data/descriptions.xml',
-  # Test => "./test/test_data.xml",
+  Description => './private_data/descriptions.xml'
 }
 
 config.each do |klass, path|
