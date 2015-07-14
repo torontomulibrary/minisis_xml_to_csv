@@ -47,7 +47,7 @@ self_ref = find_self_referencing(records)
 write_csv(self_ref, 'self_ref')
 puts "#{self_ref.count} self referencing records"
 
-# remove problematic records
+# remove problematic records before passing it to sort method
 sanitized_records = records - duplicates - orphans - nil_records - self_ref
 puts "#{sanitized_records.count} records left"
 
@@ -64,6 +64,11 @@ puts "#{dropped.count} records dropped"
 # Split up the orphans by parent and write to file
 FileUtils.mkdir_p './sanitize_out/orphans'
 missing_parents = orphans.map { |o| o['parentId'] }.uniq
+File.open('./sanitize_out/orphans/!missing_parent_ids', 'wb') do |f|
+  missing_parents.each do |id|
+    f.puts id
+  end
+end
 missing_parents.each do |parent_id|
   orphans_by_parent = orphans.select { |o| o['parentId'] == parent_id }
   outfile = "./sanitize_out/orphans/#{parent_id.to_s.gsub(':', '')}.csv"
