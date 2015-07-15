@@ -1,3 +1,15 @@
+CSV::Converters[:blank_to_nil] = lambda do |field|
+  field && field.empty? ? nil : field
+end
+
+def write_csv(records, filename)
+  FileUtils.mkdir_p './sanitize_out'
+  CSV.open("./sanitize_out/descriptions.#{filename}.csv", 'wb') do |f|
+    f << records[1].keys
+    records.each { |r| f << r.values }
+  end
+end
+
 def count_legacyids(records)
   legacy_ids = {}
   records.each do |r|
@@ -25,9 +37,10 @@ def find_self_referencing(records)
   records.select { |r| !r['parentId'].nil? && (r['legacyId'] == r['parentId']) }
 end
 
-def sort_csv(records, parents = nil)
+def sort_csv(records, parents = nil, level = 0)
   # if parents is nil, this is the first iteration
   parents = records.select { |r| r['parentId'].nil? } if parents.nil?
+  write_csv(parents, "descriptionlevel-#{level}")
 
   # figure out if records have parents in parents
   ids = parents.map { |r| r['legacyId'] }
@@ -35,5 +48,5 @@ def sort_csv(records, parents = nil)
   return parents if children.count == 0
 
   records -= children
-  parents + sort_csv(records, children)
+  parents + sort_csv(records, children, level + 1)
 end

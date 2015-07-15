@@ -1,22 +1,10 @@
 require 'csv'
 require 'fileutils'
 
-def write_csv(records, filename)
-  FileUtils.mkdir_p './sanitize_out'
-  CSV.open("./sanitize_out/descriptions.#{filename}.csv", 'wb') do |f|
-    f << records[1].keys
-    records.each { |r| f << r.values }
-  end
-end
-
 Dir[File.dirname(__FILE__) + '/lib/**/*.rb'].each { |file| require file }
 
-csv_path = './private_data/descriptions.xml.csv'
-
 # open csv file
-CSV::Converters[:blank_to_nil] = lambda do |field|
-  field && field.empty? ? nil : field
-end
+csv_path = './private_data/descriptions.xml.csv'
 csv = CSV.new(File.open(csv_path),
               headers: true,
               converters: [:all, :blank_to_nil]
