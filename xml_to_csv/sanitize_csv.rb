@@ -4,7 +4,7 @@ require 'fileutils'
 Dir[File.dirname(__FILE__) + '/lib/**/*.rb'].each { |file| require file }
 
 # open csv file
-csv_path = './private_data/descriptions.xml.csv'
+csv_path = ARGV[0]
 csv = CSV.new(File.open(csv_path),
               headers: true,
               converters: [:all, :blank_to_nil]
