@@ -5,7 +5,7 @@ end
 def write_csv(records, filename)
   FileUtils.mkdir_p './sanitize_out'
   CSV.open("./sanitize_out/descriptions.#{filename}.csv", 'wb') do |f|
-    f << records[1].keys
+    f << records[0].keys
     records.each { |r| f << r.values }
   end
 end
