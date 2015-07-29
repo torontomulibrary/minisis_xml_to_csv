@@ -40,7 +40,7 @@ end
 def sort_csv(records, parents = nil, level = 0)
   # if parents is nil, this is the first iteration
   parents = records.select { |r| r['parentId'].nil? } if parents.nil?
-  write_csv(parents, "descriptionlevel-#{level}")
+  # write_csv(parents, "descriptionlevel-#{level}")
 
   # figure out if records have parents in parents
   ids = parents.map { |r| r['legacyId'] }
