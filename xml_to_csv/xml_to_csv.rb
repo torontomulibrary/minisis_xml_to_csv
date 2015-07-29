@@ -10,6 +10,7 @@ Dir[File.dirname(__FILE__) + '/lib/**/*.rb'].each { |file| require file }
 config = {
   Accession => './private_data/accessions.xml',
   Authority => './private_data/authorities.xml',
+  AuthorityAlias => './private_data/authority_alias.xml',
   Description => './private_data/descriptions.xml'
 }
 
@@ -33,8 +34,6 @@ config.each do |klass, path|
       csv << klass.column_names.map(&:to_s)
       rows.each { |row| csv << row }
     end
-
-    # TODO: sort / re-order rows for proper import ordering
   end
 
   puts "Processing complete in #{total_elapsed}s\n\n"
