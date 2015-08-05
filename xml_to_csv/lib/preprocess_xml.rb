@@ -1,11 +1,11 @@
-require 'charlock_holmes'
+require 'charlock_holmes/string'
 require 'nokogiri'
 require 'tempfile'
 
 # Set this to automatically try to detect the encoding of the input XML
 # NB: it can be less than reliable, so set a sane default
 DETECT_ENCODING ||= false
-DEFAULT_ENCODING ||= 'ISO-8859-1'
+DEFAULT_ENCODING ||= 'UTF-8'
 
 REMOVE_ELEMENTS = %w(LOG_RECORD ACC_MOD_HIST AUTH_MOD_HIST MODIFIED_HIST)
 
@@ -34,6 +34,17 @@ def preprocess_xml(path)
   refd_highers = doc.xpath('record_set/XML_RECORD/REFD_HIGHER')
   refd_highers.each do |refd_higher|
     refd_higher.content = refd_higher.text.gsub('\n', '').strip
+  end
+  
+  # Encoding.default_external = 'UTF-8'
+  # Traverse all text nodes and ensure they are encoded correctly
+  doc.traverse do |node|
+    next unless 'text' == node.name
+    next if node.text.valid_encoding?
+    next unless detected = node.text.detect_encoding
+
+    cleaned = node.text.force_encoding(detected[:encoding])
+    node.content = cleaned.encode('UTF-8', detected) rescue nil # ignore false positives
   end
 
   # Create a tempfile to save the pre-processed XML file
