@@ -26,7 +26,7 @@ def find_duplicate_legacy_ids(records, legacy_ids)
 end
 
 def find_orphaned(records, legacy_ids)
-  records.select { |r| !legacy_ids.keys.include?(r['parentId']) }
+  records.select { |r| !legacy_ids.keys.include?(r['parentId']) && !r['parentId'].nil? }
 end
 
 def find_nil_records(records)
