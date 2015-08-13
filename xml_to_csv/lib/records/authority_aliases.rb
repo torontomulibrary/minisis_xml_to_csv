@@ -12,7 +12,7 @@ class AuthorityAlias
 
   # generate a method for each mapping so we can call it with saxrecord.mapname
   @maps.each do |map, value|
-    define_method(map) { value.map { |s| send(s) }.compact.join("\n") }
+    define_method(map) { value.map { |s| send(s) }.compact.uniq.join("\n") }
   end
 
   # overload class method
