@@ -35,7 +35,7 @@ def preprocess_xml(path)
   refd_highers.each do |refd_higher|
     refd_higher.content = refd_higher.text.gsub('\n', '').strip
   end
-  
+
   # Encoding.default_external = 'UTF-8'
   # Traverse all text nodes and ensure they are encoded correctly
   doc.traverse do |node|
