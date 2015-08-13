@@ -34,7 +34,7 @@ class Description
     locationOfCopies:       %i(OTHER_FORMATS),
     accessConditions:   %i(RESTRICTIONS),
     reproductionConditions:             %i(TERMS_GOV_USE),
-    findingAids:            %i(FINDAID),
+    findingAids:            %i(FINDAID_GROUP),
     relatedUnitsOfDescription:          %i(RELATED_MAT ASSOCIATED_MAT),
     accruals:           %i(ACCRUALS_NOTES),
     radNoteAccompanyingMaterial:    %i(ACCOMPANYING_MAT),
@@ -63,16 +63,22 @@ class Description
                     eventStartDates eventEndDates eventDescriptions alternativeIdentifiers
                     alternativeIdentifierLabels)
 
-  # generate a method for each mapping so we can call it with saxrecord.mapname
-  @maps.each do |map, value|
-    delim = @multi_value.include? map ? '|' : "\n"
+  def self.concat(element = nil)
+    (@multi_value.include?(element) ? '|' : "\n")
+  end
 
-    define_method(map) { value.map { |s| send(s) }.compact.join(delim) }
+  def concat(element = nil)
+    self.class.concat(element)
   end
 
   # overload class method
   def self.column_names
     @maps.keys
+  end
+
+  # generate a method for each mapping so we can call it with saxrecord.mapname
+  @maps.each do |map, value|
+    define_method(map) { value.map { |s| send(s) }.compact.uniq.join(concat(map)) }
   end
 
   # Define the elements that we want to pull out of the XML file
@@ -178,18 +184,18 @@ class Description
   element :WEBD
 
   # methods for special cases (i.e.: nested elements)
-  def D_ACCNO(concat = '|')
+  def D_ACCNO
     parent = send(:ACCESSION_GRP)
-    parent.map(&:D_ACCNO).compact.join(concat) unless parent.nil?
+    parent.map(&:D_ACCNO).compact.uniq.join(concat) unless parent.nil?
   end
 
-  def FINDAID(concat = "\n")
-    parent = send(:FINDAID_GROUP)
-    parent.map(&:FINDAID).compact.join(concat) unless parent.nil?
-  end
+#  def FINDAID
+#    parent = send(:FINDAID_GROUP)
+#    parent.map(&:FINDAID).compact.uniq.join(concat) unless parent.nil?
+#  end
 
-  def OTHER_FORMATS(concat = "\n")
+  def OTHER_FORMATS
     parent = send(:AVAILABILITY)
-    parent.map(&:OTHER_FORMATS).compact.join(concat) unless parent.nil?
+    parent.map(&:OTHER_FORMATS).compact.uniq.join(concat) unless parent.nil?
   end
 end

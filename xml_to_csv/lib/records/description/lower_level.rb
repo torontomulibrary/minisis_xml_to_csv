@@ -7,6 +7,6 @@ class LowerLevel
   element :LOWER_TYPE
 
   def to_s
-    self.class.column_names.map { |col| send(col) }.compact.join('|')
+    self.class.column_names.map { |col| send(col) }.compact.uniq.join('xxx') # FIXME
   end
 end

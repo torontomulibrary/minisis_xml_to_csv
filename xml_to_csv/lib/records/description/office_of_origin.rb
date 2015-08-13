@@ -5,6 +5,6 @@ class OfficeOfOrigin
   element :OFFICE_AB
 
   def to_s
-    self.class.column_names.map { |col| send(col) }.compact.join('|')
+    self.class.column_names.map { |col| send(col) }.compact.uniq.join('xxx') # FIXME
   end
 end
