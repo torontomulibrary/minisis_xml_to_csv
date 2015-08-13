@@ -12,6 +12,6 @@ class LocationGroup
   element :BARCODE_DATE
 
   def to_s
-    self.class.column_names.map { |col| send(col) }.compact.join('|')
+    self.class.column_names.map { |col| send(col) }.compact.uniq.join('. ')
   end
 end

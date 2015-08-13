@@ -12,7 +12,7 @@ class Accession
     appraisal:            %i(VALUATION_GROUP),
     creators:             %i(ACC_CREATOR),
     donorName:            %i(DONOR_GROUP),
-    locationInformation:  %i(BUS_UNIT_OWNER LOCATION_DETAILS),
+    locationInformation:  %i(BUS_UNIT_OWNER LOCATION_GROUP),
     processingNotes:      %i(EXTENT_KEPT COMMENTS_ACC ARRANGEMNT_NOTES
                              PROCESSING_NOTES ARC_NOTES DESPATCH_GRP
                              EX_ACC_NOTES),
@@ -29,16 +29,22 @@ class Accession
                     creatorDatesEnd eventActors eventTypes eventPlaces eventDates
                     eventStartDates eventEndDates eventDescriptions)
 
-  # generate a method for each mapping so we can call it with saxrecord.mapname
-  @maps.each do |map, value|
-    delim = @multi_value.include? map ? '|' : "\n"
+  def self.concat(element = nil)
+    (@multi_value.include?(element) ? '|' : "\n")
+  end
 
-    define_method(map) { value.map { |s| send(s) }.compact.join(delim) }
+  def concat(element = nil)
+    self.class.concat(element)
   end
 
   # overload class method
   def self.column_names
     @maps.keys
+  end
+
+  # generate a method for each mapping so we can call it with saxrecord.mapname
+  @maps.each do |map, value|
+    define_method(map) { value.map { |s| send(s) }.compact.join(concat(map)) }
   end
 
   # Define the elements that we want to pull out of the XML file
@@ -65,18 +71,13 @@ class Accession
   elements :VALUATION_GROUP, class: ValuationGroup
 
   # methods for special cases (i.e.: nested elements)
-  def EX_ACC_DATE(concat = "\n")
+  def EX_ACC_DATE
     parent = send(:EX_ACC_GROUP)
     parent.map(&:EX_ACC_DATE).compact.join(concat) unless parent.nil?
   end
 
-  def EX_ACC_NOTES(concat = "\n")
+  def EX_ACC_NOTES
     parent = send(:EX_ACC_GROUP)
     parent.map(&:EX_ACC_NOTES).compact.join(concat) unless parent.nil?
-  end
-
-  def LOCATION_DETAILS(concat = "\n")
-    parent = send(:LOCATION_GROUP)
-    parent.map(&:LOCATION_DETAILS).compact.join(concat) unless parent.nil?
   end
 end

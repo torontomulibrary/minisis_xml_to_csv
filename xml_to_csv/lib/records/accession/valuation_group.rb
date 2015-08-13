@@ -17,6 +17,13 @@ class ValuationGroup
   element :VAL_REN_DATE
 
   def to_s
-    self.class.column_names.map { |col| send(col) }.compact.join('|')
+    value = String.new
+    value += "Purchased for #{@PURCHASE_PRICE} #{@PURCHASE_CUR}.\n" if @PURCHASE_PRICE
+    value += "Valued at #{[@VAL_AMOUNT, @VALUATION].compact.uniq.join(' / ')} #{[@EST_VAL_CUR, @VALUE_CUR].compact.uniq.first}" if @VAL_AMOUNT or @VALUATION
+    value += " (#{[@VALUATION_TYPE, @VALUATION2_TYPE].compact.uniq.join(' / ')})" if @VALUATION_TYPE or @VALUATION2_TYPE
+    value += " on #{[@VAL_DATE, @VALUATION_DATE, @VAL_REN_DATE].compact.uniq.join(' / ')}" if @VAL_DATE or @VALUATION_DATE or @VAL_REN_DATE
+    value += " by #{@VALUER}" if @VALUER
+    value += ".\n#{@VALUATION_NOTICE}" if @VALUATION_NOTICE
+    value + "\n"
   end
 end

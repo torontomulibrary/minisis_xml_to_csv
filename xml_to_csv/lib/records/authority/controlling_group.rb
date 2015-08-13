@@ -3,9 +3,9 @@ class ControllingGroup
   include SAXMachine
 
   element :DATE_CONTROLLED
-  element :CONT_AGENCY
+  element :CONT_AGENCY # UNMAPPED
 
   def to_s
-    self.class.column_names.map { |col| send(col) }.compact.join('|')
+    self.send :DATE_CONTROLLED
   end
 end
