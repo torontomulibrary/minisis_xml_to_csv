@@ -53,9 +53,21 @@ class Description
     archivistNote:          %i(BOX_NO COMMENTS_DESC)
   }
 
+  # fields which can have multiple pipe-separated values
+  # from: https://github.com/ryersonlibrary/atom/blob/RULA/2.2.x/lib/task/import/csvImportTask.class.php#L387-L417
+  @multi_value = %i(accessionNumber creators creatorHistories creationDates creationDateNotes
+                    creationDatesStart creationDatesEnd creatorDates creatorDatesStart
+                    creatorDatesEnd creatorDateNotes nameAccessPoints nameAccessPointHistories
+                    placeAccessPoints placeAccessPointHistories subjectAccessPoints
+                    subjectAccessPointScopes eventActors eventTypes eventPlaces eventDates
+                    eventStartDates eventEndDates eventDescriptions alternativeIdentifiers
+                    alternativeIdentifierLabels)
+
   # generate a method for each mapping so we can call it with saxrecord.mapname
   @maps.each do |map, value|
-    define_method(map) { value.map { |s| send(s) }.compact.join('|') }
+    delim = @multi_value.include? map ? '|' : "\n"
+
+    define_method(map) { value.map { |s| send(s) }.compact.join(delim) }
   end
 
   # overload class method
@@ -171,12 +183,12 @@ class Description
     parent.map(&:D_ACCNO).compact.join(concat) unless parent.nil?
   end
 
-  def FINDAID(concat = '|')
+  def FINDAID(concat = "\n")
     parent = send(:FINDAID_GROUP)
     parent.map(&:FINDAID).compact.join(concat) unless parent.nil?
   end
 
-  def OTHER_FORMATS(concat = '|')
+  def OTHER_FORMATS(concat = "\n")
     parent = send(:AVAILABILITY)
     parent.map(&:OTHER_FORMATS).compact.join(concat) unless parent.nil?
   end

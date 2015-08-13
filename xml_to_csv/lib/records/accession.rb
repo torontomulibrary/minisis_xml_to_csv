@@ -10,7 +10,8 @@ class Accession
     acquisitionDate:      %i(RECDATE EX_ACC_DATE),
     acquisitionType:      %i(ACQUISITION_TYPE),
     appraisal:            %i(VALUATION_GROUP),
-    creators:             %i(ACC_CREATOR DONOR_GROUP),
+    creators:             %i(ACC_CREATOR),
+    donorName:            %i(DONOR_GROUP),
     locationInformation:  %i(BUS_UNIT_OWNER LOCATION_DETAILS),
     processingNotes:      %i(EXTENT_KEPT COMMENTS_ACC ARRANGEMNT_NOTES
                              PROCESSING_NOTES ARC_NOTES DESPATCH_GRP
@@ -21,9 +22,18 @@ class Accession
     title:                %i(ACC_TITLE)
   }
 
+  # fields which can have multiple pipe-separated values
+  # from: https://github.com/ryersonlibrary/atom/blob/RULA/2.2.x/lib/task/import/csvAccessionImportTask.class.php#L120-L136
+  @multi_value = %i(creators creatorHistories creationDates creationDatesStart
+                    creationDatesEnd creationDatesType creatorDates creatorDatesStart
+                    creatorDatesEnd eventActors eventTypes eventPlaces eventDates
+                    eventStartDates eventEndDates eventDescriptions)
+
   # generate a method for each mapping so we can call it with saxrecord.mapname
   @maps.each do |map, value|
-    define_method(map) { value.map { |s| send(s) }.compact.join('|') }
+    delim = @multi_value.include? map ? '|' : "\n"
+
+    define_method(map) { value.map { |s| send(s) }.compact.join(delim) }
   end
 
   # overload class method
@@ -55,17 +65,17 @@ class Accession
   elements :VALUATION_GROUP, class: ValuationGroup
 
   # methods for special cases (i.e.: nested elements)
-  def EX_ACC_DATE(concat = '|')
+  def EX_ACC_DATE(concat = "\n")
     parent = send(:EX_ACC_GROUP)
     parent.map(&:EX_ACC_DATE).compact.join(concat) unless parent.nil?
   end
 
-  def EX_ACC_NOTES(concat = '|')
+  def EX_ACC_NOTES(concat = "\n")
     parent = send(:EX_ACC_GROUP)
     parent.map(&:EX_ACC_NOTES).compact.join(concat) unless parent.nil?
   end
 
-  def LOCATION_DETAILS(concat = '|')
+  def LOCATION_DETAILS(concat = "\n")
     parent = send(:LOCATION_GROUP)
     parent.map(&:LOCATION_DETAILS).compact.join(concat) unless parent.nil?
   end
