@@ -14,7 +14,7 @@ csv = CSV.new(File.open(csv_path),
 records = csv.to_a.map(&:to_hash)
 puts "Total records: #{records.count}"
 
-records_per_file = 2_500
+records_per_file = 500
 
 while_iter = 0
 while records.count > 0
