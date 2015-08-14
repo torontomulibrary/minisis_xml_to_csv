@@ -22,8 +22,6 @@ def process_xml(klass, path)
     sax_klass.parse(f)
   end
 
-  maps = klass.instance_variable_get :@maps
-
   record_set.records.map do |record|
 
     # Normalize encoding on all values
