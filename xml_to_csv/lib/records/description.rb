@@ -191,7 +191,6 @@ class Description
   end
 
   def D_ACCNO
-    parent = send(:ACCESSION_GRP)
-    parent.map(&:D_ACCNO).compact.uniq.join(concat(:accessionNumber)) unless parent.nil?
+    send(:ACCESSION_GRP).map(&:D_ACCNO).compact.uniq.join(concat(:accessionNumber))
   end
 end

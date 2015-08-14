@@ -72,12 +72,10 @@ class Accession
 
   # methods for special cases (i.e.: nested elements)
   def EX_ACC_DATE
-    parent = send(:EX_ACC_GROUP)
-    parent.map(&:EX_ACC_DATE).compact.uniq.join(concat) unless parent.nil?
+    send(:EX_ACC_GROUP).map(&:EX_ACC_DATE).compact.uniq.join(concat(:acquisitionDate))
   end
 
   def EX_ACC_NOTES
-    parent = send(:EX_ACC_GROUP)
-    parent.map(&:EX_ACC_NOTES).compact.uniq.join(concat) unless parent.nil?
+    send(:EX_ACC_GROUP).map(&:EX_ACC_NOTES).compact.uniq.join(concat(:processingNotes))
   end
 end

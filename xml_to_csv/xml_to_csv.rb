@@ -8,9 +8,9 @@ Dir[File.dirname(__FILE__) + '/lib/**/*.rb'].each { |file| require file }
 
 # Set class-pathname pairs
 config = {
-#  Accession => './private_data/accessions.xml',
-#  Authority => './private_data/authorities.xml',
-#  AuthorityAlias => './private_data/authority_alias.xml',
+  Accession => './private_data/accessions.xml',
+  Authority => './private_data/authorities.xml',
+  AuthorityAlias => './private_data/authority_alias.xml',
   Description => './private_data/descriptions.xml'
 }
 
