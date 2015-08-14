@@ -44,7 +44,7 @@ class Accession
 
   # generate a method for each mapping so we can call it with saxrecord.mapname
   @maps.each do |map, value|
-    define_method(map) { value.map { |s| send(s) }.compact.uniq.join(concat(map)) }
+    define_method(map) { value.map { |s| send(s) }.flatten.compact.uniq.join(concat(map)) }
   end
 
   # Define the elements that we want to pull out of the XML file
@@ -72,10 +72,10 @@ class Accession
 
   # methods for special cases (i.e.: nested elements)
   def EX_ACC_DATE
-    send(:EX_ACC_GROUP).map(&:EX_ACC_DATE).compact.uniq.join(concat(:acquisitionDate))
+    send(:EX_ACC_GROUP).map(&:EX_ACC_DATE).flatten.compact.uniq.join(concat(:acquisitionDate))
   end
 
   def EX_ACC_NOTES
-    send(:EX_ACC_GROUP).map(&:EX_ACC_NOTES).compact.uniq.join(concat(:processingNotes))
+    send(:EX_ACC_GROUP).map(&:EX_ACC_NOTES).flatten.compact.uniq.join(concat(:processingNotes))
   end
 end

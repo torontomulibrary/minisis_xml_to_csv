@@ -78,7 +78,7 @@ class Description
 
   # generate a method for each mapping so we can call it with saxrecord.mapname
   @maps.each do |map, value|
-    define_method(map) { value.map { |s| send(s) }.compact.uniq.join(concat(map)) }
+    define_method(map) { value.map { |s| send(s) }.flatten.compact.uniq.join(concat(map)) }
   end
 
   # Define the elements that we want to pull out of the XML file
@@ -187,10 +187,10 @@ class Description
   def ORIGINATOR
     origin = send(:ORIGINATION_GRP).map(&:ORIGINATOR)
     office = send(:OFFICE_OF_ORIGIN).map(&:OFFICE_AB)
-    (origin + office).compact.uniq.join(concat(:creators))
+    (origin + office).flatten.compact.uniq.join(concat(:creators))
   end
 
   def D_ACCNO
-    send(:ACCESSION_GRP).map(&:D_ACCNO).compact.uniq.join(concat(:accessionNumber))
+    send(:ACCESSION_GRP).map(&:D_ACCNO).flatten.compact.uniq.join(concat(:accessionNumber))
   end
 end
