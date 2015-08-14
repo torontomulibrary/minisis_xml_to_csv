@@ -2,11 +2,8 @@
 class LowerLevel
   include SAXMachine
 
+  # THIS CLASS IS UNMAPPED
   element :LOWER_CODE
   element :LOWER_TITLE
   element :LOWER_TYPE
-
-  def to_s
-    self.class.column_names.map { |col| send(col) }.compact.uniq.join('xxx') # FIXME
-  end
 end

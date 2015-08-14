@@ -18,7 +18,7 @@ class Description
     identifier:             %i(REFD),
     alternativeIdentifiers: %i(STANDARD_NUMBER ISBN OTHER_CODES AV_NUMBER),
     radEdition:               %i(EDITION),
-    creators:               %i(ORIGINATION_GRP),
+    creators:               %i(ORIGINATOR),
     creatorDates:           %i(DATE_CR_INC DATE_CR_PRED),
     extentAndMedium:        %i(PHYSICAL_DESC),
     radPublishersSeriesNote:            %i(PUBLISHER_SERIES),
@@ -31,7 +31,7 @@ class Description
     language:               %i(LANGUAGE LANGUAGE_MAT),
     languageNote:           %i(LANGUAGE_NOTES),
     locationOfOriginals:    %i(LOC_OF_ORIGINAL),
-    locationOfCopies:       %i(OTHER_FORMATS),
+    locationOfCopies:       %i(AVAILABILITY),
     accessConditions:   %i(RESTRICTIONS),
     reproductionConditions:             %i(TERMS_GOV_USE),
     findingAids:            %i(FINDAID_GROUP),
@@ -184,18 +184,14 @@ class Description
   element :WEBD
 
   # methods for special cases (i.e.: nested elements)
-  def D_ACCNO
-    parent = send(:ACCESSION_GRP)
-    parent.map(&:D_ACCNO).compact.uniq.join(concat) unless parent.nil?
+  def ORIGINATOR
+    origin = send(:ORIGINATION_GRP).map(&:ORIGINATOR)
+    office = send(:OFFICE_OF_ORIGIN).map(&:OFFICE_AB)
+    (origin + office).compact.uniq.join(concat(:creators))
   end
 
-#  def FINDAID
-#    parent = send(:FINDAID_GROUP)
-#    parent.map(&:FINDAID).compact.uniq.join(concat) unless parent.nil?
-#  end
-
-  def OTHER_FORMATS
-    parent = send(:AVAILABILITY)
-    parent.map(&:OTHER_FORMATS).compact.uniq.join(concat) unless parent.nil?
+  def D_ACCNO
+    parent = send(:ACCESSION_GRP)
+    parent.map(&:D_ACCNO).compact.uniq.join(concat(:accessionNumber)) unless parent.nil?
   end
 end

@@ -9,7 +9,7 @@ class DespatchGroup
   element :DEACC_DOC_GRP
   element :APPROVED_BY
   element :APPROVED_DATE
-  element :LEGAL_RIGHT # UNUSED
+  element :LEGAL_RIGHT # UNMAPPED
   element :DES_REC_BY
 
   def to_s

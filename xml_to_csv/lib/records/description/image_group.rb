@@ -2,6 +2,7 @@
 class ImageGroup
   include SAXMachine
 
+  # THIS CLASS IS UNMAPPED
   element :IMAGEFILE
   element :IMAGE_PRESENT
   element :IMAGE_COLOUR
@@ -9,8 +10,4 @@ class ImageGroup
   element :IMAGE_SIZE
   element :CAPTION
   element :IMAGE_EXTENT
-
-  def to_s
-    self.class.column_names.map { |col| send(col) }.compact.uniq.join('xxx') # FIXME
-  end
 end
