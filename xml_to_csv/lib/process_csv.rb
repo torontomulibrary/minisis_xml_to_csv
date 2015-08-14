@@ -2,6 +2,34 @@ CSV::Converters[:blank_to_nil] = lambda do |field|
   field && field.empty? ? nil : field
 end
 
+# Loop over each row and process individual values in place
+def process_rows!(rows)
+  rows.map! do |row|
+    row.map! do |value|
+      if value.is_a? String
+        # Replace extra whitespaces
+        value.strip!
+        value.squeeze!(' ')
+
+        # Replace extra pipe delimiters
+        value.squeeze!('|')
+        value.chomp!('|')
+        value = value.sub(/^[|]*/,'')
+
+        # Replace incorrect newlines
+        value = value.gsub '<br>', "\n"
+        value = value.gsub '\\n', "\n"
+        value.squeeze("\n")
+      else
+        value
+      end
+    end
+  end
+
+  # Remove duplicate rows
+  rows.uniq!
+end
+
 def write_csv(records, filename)
   FileUtils.mkdir_p './sanitize_out'
   CSV.open("./sanitize_out/descriptions.#{filename}.csv", 'wb') do |f|

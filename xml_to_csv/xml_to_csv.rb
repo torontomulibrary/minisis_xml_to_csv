@@ -18,12 +18,9 @@ config.each do |klass, path|
   puts "\n\nBegin Processing #{path} ..."
 
   total_elapsed = Benchmark.realtime do
-    # Pre-process each input XML file
-    tempfile = preprocess_xml(path)
-
     # Process the XML file to use for CSV creation
     # NB: this will return a potentially large array
-    rows = process_xml(klass, tempfile)
+    rows = process_xml(klass, path)
 
     process_rows!(rows)
 
