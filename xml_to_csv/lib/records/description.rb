@@ -184,6 +184,10 @@ class Description
   element :WEBD
 
   # methods for special cases (i.e.: nested elements)
+  def REFD_HIGHER
+    @REFD_HIGHER.to_s.gsub('\n', '').strip
+  end
+
   def ORIGINATOR
     origin = send(:ORIGINATION_GRP).map(&:ORIGINATOR)
     office = send(:OFFICE_OF_ORIGIN).map(&:OFFICE_AB)

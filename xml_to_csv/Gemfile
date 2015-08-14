@@ -4,7 +4,6 @@ gem 'pry'
 
 # XML handling gems
 gem 'sax-machine'
-gem 'nokogiri'
 gem 'ox'
 
 gem 'charlock_holmes'

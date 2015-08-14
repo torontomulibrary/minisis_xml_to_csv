@@ -42,7 +42,7 @@ Vagrant.configure(2) do |config|
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   config.vm.provider 'virtualbox' do |vb|
-    vb.customize ['modifyvm', :id, '--memory', '4096']
+    vb.customize ['modifyvm', :id, '--memory', '2048']
 
     # comment these two lines out if CPU only has one core
     vb.customize ['modifyvm', :id, '--cpus', '2']

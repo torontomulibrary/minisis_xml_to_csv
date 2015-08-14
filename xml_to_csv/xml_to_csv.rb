@@ -11,7 +11,7 @@ config = {
   Accession => './private_data/accessions.xml',
   Authority => './private_data/authorities.xml',
   AuthorityAlias => './private_data/authority_alias.xml',
-  Description => './private_data/descriptions.xml'
+  Description => './private_data/descriptions-small.xml'
 }
 
 config.each do |klass, path|

@@ -1,14 +1,4 @@
 require 'charlock_holmes/string'
-require 'nokogiri'
-require 'tempfile'
-
-# Set this to automatically try to detect the encoding of the input XML
-# NB: it can be less than reliable, so set a sane default
-DETECT_ENCODING ||= false
-DEFAULT_ENCODING ||= 'UTF-8'
-
-REMOVE_ELEMENTS = %w(LOG_RECORD ACC_MOD_HIST AUTH_MOD_HIST MODIFIED_HIST)
-
 require 'sax-machine'
 require 'ox'
 
@@ -19,73 +9,33 @@ class RecordSet
   include SAXMachine
 end
 
-def preprocess_xml(path)
-  if DETECT_ENCODING
-    encoding = detect_encoding(path)
-    puts "Detected encoding: #{encoding}."
-    doc = Nokogiri::XML(File.open(path), nil, encoding)
-  else
-    doc = Nokogiri::XML(File.open(path), nil, DEFAULT_ENCODING)
-  end
-
-  # Match all record elements that we want to process
-  records = doc.xpath('record_set/XML_RECORD')
-
-  puts "Preprocessing #{records.count} record nodes ..."
-
-  # Remove unnecessary elements to reduce document size
-  removed = records.map do |record|
-    record.xpath(REMOVE_ELEMENTS.join('|')).remove.count
-  end
-
-  puts "Removed #{removed.reduce(:+)} unnecessary nodes."
-
-  # Clean up REFD_HIGHER for newlines, trailing/leading spaces
-  refd_highers = doc.xpath('record_set/XML_RECORD/REFD_HIGHER')
-  refd_highers.each do |refd_higher|
-    refd_higher.content = refd_higher.text.gsub('\n', '').strip
-  end
-
-  # Encoding.default_external = 'UTF-8'
-  # Traverse all text nodes and ensure they are encoded correctly
-  doc.traverse do |node|
-    next unless 'text' == node.name
-    next if node.text.valid_encoding?
-    next unless detected = node.text.detect_encoding
-
-    cleaned = node.text.force_encoding(detected[:encoding])
-    node.content = cleaned.encode('UTF-8', detected) rescue nil # ignore false positives
-  end
-
-  # Create a tempfile to save the pre-processed XML file
-  tempfile = Tempfile.new(Pathname.new(path).basename.to_s)
-  output_xml = doc.to_xml(encoding: 'UTF-8', save_with: Nokogiri::XML::Node::SaveOptions::NO_DECLARATION)
-
-  tempfile.write(output_xml)
-  tempfile.rewind
-  tempfile
+class Record
+  include SAXMachine
 end
 
 # Use the SAX parser to generate a 2-dimensonal array of mapped values
 def process_xml(klass, path)
-  # Pre-process each input XML file
-  tempfile = preprocess_xml(path)
-
   sax_klass = RecordSet.clone
   sax_klass.elements :XML_RECORD, as: :records, class: klass
 
-  xml = File.open(tempfile, 'r:UTF-8', &:read)
-  record_set = sax_klass.parse(xml)
+  record_set = File.open(path, 'r:UTF-8') do |f|
+    sax_klass.parse(f)
+  end
 
-  puts "Processing #{record_set.records.count} record nodes ..."
+  maps = klass.instance_variable_get :@maps
 
   record_set.records.map do |record|
-    record.class.column_names.map { |col| record.send(col) }
+
+    # Normalize encoding on all values
+    record.class.column_names.map do |col|
+      clean_encoding(record.send(col))
+    end
   end
 end
 
-# Detect encoding of incoming XML document
-def detect_encoding(path)
-  detection = CharlockHolmes::EncodingDetector.detect(File.read(path))
-  detection[:encoding]
+def clean_encoding(string)
+  return string if string.valid_encoding?
+  return string unless detected = string.detect_encoding
+
+  string.force_encoding(detected[:encoding]).encode('UTF-8', detected[:encoding], invalid: :replace, undef: :replace)
 end
