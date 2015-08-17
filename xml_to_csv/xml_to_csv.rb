@@ -34,6 +34,13 @@ config.each do |klass, path|
   end
 
   puts "Processing complete in #{total_elapsed}s\n\n"
+
+  # save the list of accession numbers to file
+  if klass == Accession
+    data = []
+    CSV.foreach('./private_data/accessions.xml.csv') { |row| data << row[0] }
+    File.open('./private_data/accessionNumbers', 'w+') { |f| f.puts(data) }
+  end
 end
 
 exit

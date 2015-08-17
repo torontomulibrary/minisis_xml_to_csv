@@ -1,5 +1,11 @@
 Dir[File.dirname(__FILE__) + '/description/*.rb'].each { |file| require file }
 
+# load accessionNumbers from file
+ACCESSIONS = []
+File.open(File.expand_path('private_data/accessionNumbers')).each_line do |line|
+  ACCESSIONS.push line
+end
+
 # Description
 class Description
   include SAXMachine
@@ -55,13 +61,15 @@ class Description
 
   # fields which can have multiple pipe-separated values
   # from: https://github.com/ryersonlibrary/atom/blob/RULA/2.2.x/lib/task/import/csvImportTask.class.php#L387-L417
-  @multi_value = %i(accessionNumber creators creatorHistories creationDates creationDateNotes
-                    creationDatesStart creationDatesEnd creatorDates creatorDatesStart
-                    creatorDatesEnd creatorDateNotes nameAccessPoints nameAccessPointHistories
-                    placeAccessPoints placeAccessPointHistories subjectAccessPoints
-                    subjectAccessPointScopes eventActors eventTypes eventPlaces eventDates
-                    eventStartDates eventEndDates eventDescriptions alternativeIdentifiers
-                    alternativeIdentifierLabels)
+  @multi_value = %i(
+    accessionNumber creators creatorHistories creationDates
+    creationDateNotes creationDatesStart creationDatesEnd creatorDates
+    creatorDatesStart creatorDatesEnd creatorDateNotes nameAccessPoints
+    nameAccessPointHistories placeAccessPoints placeAccessPointHistories
+    subjectAccessPoints subjectAccessPointScopes eventActors eventTypes
+    eventPlaces eventDates eventStartDates eventEndDates eventDescriptions
+    alternativeIdentifiers alternativeIdentifierLabels
+  )
 
   def self.concat(element = nil)
     (@multi_value.include?(element) ? '|' : "\n")
@@ -195,6 +203,9 @@ class Description
   end
 
   def D_ACCNO
-    send(:ACCESSION_GRP).map(&:D_ACCNO).flatten.compact.uniq.join(concat(:accessionNumber))
+    accnos = send(:ACCESSION_GRP).map(&:D_ACCNO).flatten.compact.uniq
+    # accnos &= ACCESSIONS
+    puts accnos
+    accnos.join(concat(:accessionNumber))
   end
 end
