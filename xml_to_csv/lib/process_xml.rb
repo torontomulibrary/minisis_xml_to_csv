@@ -9,6 +9,7 @@ class RecordSet
   include SAXMachine
 end
 
+# Record
 class Record
   include SAXMachine
 end
@@ -23,7 +24,6 @@ def process_xml(klass, path)
   end
 
   record_set.records.map do |record|
-
     # Normalize encoding on all values
     record.class.column_names.map do |col|
       clean_encoding(record.send(col))

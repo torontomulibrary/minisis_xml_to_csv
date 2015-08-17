@@ -14,7 +14,7 @@ def process_rows!(rows)
         # Replace extra pipe delimiters
         value.squeeze!('|')
         value.chomp!('|')
-        value = value.sub(/^[|]*/,'')
+        value = value.sub(/^[|]*/, '')
 
         # Replace incorrect newlines
         value = value.gsub '<br>', "\n"
