@@ -205,7 +205,6 @@ class Description
   def D_ACCNO
     accnos = send(:ACCESSION_GRP).map(&:D_ACCNO).flatten.compact.uniq
     # accnos &= ACCESSIONS
-    puts accnos
     accnos.join(concat(:accessionNumber))
   end
 end
