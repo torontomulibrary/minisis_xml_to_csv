@@ -17,6 +17,14 @@ config = {
 config.each do |klass, path|
   puts "\n\nBegin Processing #{path} ..."
 
+  if klass.eql? Description
+    # load accessionNumbers from file
+    ACCESSIONS = []
+    File.open(File.expand_path('private_data/accessionNumbers')).each_line do |line|
+      ACCESSIONS.push line.strip
+    end
+  end
+
   total_elapsed = Benchmark.realtime do
     # Process the XML file to use for CSV creation
     # NB: this will return a potentially large array
@@ -33,14 +41,14 @@ config.each do |klass, path|
     end
   end
 
-  puts "Processing complete in #{total_elapsed}s\n\n"
-
   # save the list of accession numbers to file
-  if klass == Accession
+  if klass.eql? Accession
     data = []
     CSV.foreach('./private_data/accessions.xml.csv') { |row| data << row[0] }
     File.open('./private_data/accessionNumbers', 'w+') { |f| f.puts(data) }
   end
+
+  puts "Processing complete in #{total_elapsed}s\n\n"
 end
 
 exit

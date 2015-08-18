@@ -1,11 +1,5 @@
 Dir[File.dirname(__FILE__) + '/description/*.rb'].each { |file| require file }
 
-# load accessionNumbers from file
-ACCESSIONS = []
-File.open(File.expand_path('private_data/accessionNumbers')).each_line do |line|
-  ACCESSIONS.push line.strip
-end
-
 # Description
 class Description
   include SAXMachine

@@ -6,8 +6,6 @@ class Authority
 
   # Define the columns we want in the CSV file
   @maps = {
-    alternateForm:          %i(VARIANT_NAME PREDECESSOR SUCCESSOR
-                               PARALLEL_NAME),
     authorizedFormOfName:   %i(HEADING),
     datesOfExistence:       %i(CONTROLLING_GRP),
     history:                %i(ADMIN_HISTORY),
@@ -17,7 +15,19 @@ class Authority
 
   # generate a method for each mapping so we can call it with saxrecord.mapname
   @maps.each do |map, value|
-    define_method(map) { value.map { |s| send(s) }.flatten.compact.uniq.join("\n") }
+    define_method(map) { value.map { |s| send(s) }.flatten.compact.uniq.join(concat(map)) }
+  end
+
+  @concatenators = {
+    typeOfEntity: ' '
+  }
+
+  def self.concat(element = nil)
+    (@concatenators.include?(element) ? @concatenators[element] : "\n")
+  end
+
+  def concat(element = nil)
+    self.class.concat(element)
   end
 
   # overload class method
