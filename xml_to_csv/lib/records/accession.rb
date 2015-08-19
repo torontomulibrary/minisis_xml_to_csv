@@ -24,13 +24,28 @@ class Accession
 
   # fields which can have multiple pipe-separated values
   # from: https://github.com/ryersonlibrary/atom/blob/RULA/2.2.x/lib/task/import/csvAccessionImportTask.class.php#L120-L136
-  @multi_value = %i(creators creatorHistories creationDates creationDatesStart
-                    creationDatesEnd creationDatesType creatorDates creatorDatesStart
-                    creatorDatesEnd eventActors eventTypes eventPlaces eventDates
-                    eventStartDates eventEndDates eventDescriptions)
+  @concatenators = {
+    creators: '|',
+    creatorHistories: '|',
+    creationDates: '|',
+    creationDatesStart: '|',
+    creationDatesEnd: '|',
+    creationDatesType: '|',
+    creatorDates: '|',
+    creatorDatesStart: '|',
+    creatorDatesEnd: '|',
+    eventActors: '|',
+    eventTypes: '|',
+    eventPlaces: '|',
+    eventDates: '|',
+    eventStartDates: '|',
+    eventEndDates: '|',
+    eventDescriptions: '|',
+    processingStatus: ' '
+  }
 
   def self.concat(element = nil)
-    (@multi_value.include?(element) ? '|' : "\n")
+    (@concatenators.include?(element) ? @concatenators[element] : "\n")
   end
 
   def concat(element = nil)
